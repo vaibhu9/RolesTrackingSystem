@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)file:///D:/Role-Tracker-Module/Role-Tracker-UI/index.html# -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role Tracking System</title>
+    <link rel="stylesheet" href="./Role Tracking System-Raw_UI_files/style.css">
+    <link href="./Role Tracking System-Raw_UI_files/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+</head>
+<body>
+    <header>
+        <div class="logo">Role Tracker</div>
+        <nav>
+            <ul>
+                <li><a href="file:///D:/Role-Tracker-Module/Role-Tracker-UI/index.html#">Home</a></li>
+                <li><a href="file:///D:/Role-Tracker-Module/Role-Tracker-UI/index.html#">Members</a></li>
+                <li><a href="file:///D:/Role-Tracker-Module/Role-Tracker-UI/index.html#">Roles</a></li>
+                <li><a href="file:///D:/Role-Tracker-Module/Role-Tracker-UI/index.html#">Meetings</a></li>
+                <li><a href="file:///D:/Role-Tracker-Module/Role-Tracker-UI/index.html#">Reports</a></li>
+                <li><a href="file:///D:/Role-Tracker-Module/Role-Tracker-UI/index.html#">Settings</a></li>
+            </ul>
+        </nav>
+        <div class="profile">
+            <img src="./Role Tracking System-Raw_UI_files/profile.webp" alt="Profile">
+            <div class="dropdown">
+                <a href="file:///D:/Role-Tracker-Module/Role-Tracker-UI/Account.html">Account</a>
+                <a href="file:///D:/Role-Tracker-Module/Role-Tracker-UI/index.html#">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="dashboard">
+            <div class="summary-cards">
+                <div class="card">
+                    <h3>Total Members</h3>
+                    <p>150</p>
+                </div>
+                <div class="card">
+                    <h3>Active Members</h3>
+                    <p>120</p>
+                </div>
+                <div class="card">
+                    <h3>Inactive Members</h3>
+                    <p>30</p>
+                </div>
+            </div>
+
+            <div class="activity-chart">
+                <h2>Member Activity</h2>
+                <!-- Chart Placeholder -->
+            </div>
+
+            <div class="quick-actions">
+                <button class="btn-primary">Add New Member</button>
+                <button class="btn-primary">Add New Role</button>
+                <button class="btn-primary">Schedule Meeting</button>
+            </div>
+        </section>
+
+        <section class="roles">
+            <h2>Manage Roles</h2>
+            
+            <!-- Role List -->
+            <div class="role-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Role Name</th>
+                            <th>Description</th>
+                            <th>Assigned To</th>
+                            <th>Date Assigned</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Timer</td>
+                            <td>Note Time and manage with members</td>
+                            <td>Dr. Surve</td>
+                            <td>2024-08-01</td>
+                            <td>
+                                <button class="btn-secondary">Edit</button>
+                                <button class="btn-danger">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Speaker</td>
+                            <td>Speaks on random topic</td>
+                            <td>Krishnath</td>
+                            <td>2024-08-01</td>
+                            <td>
+                                <button class="btn-secondary">Edit</button>
+                                <button class="btn-danger">Delete</button>
+                            </td>
+                        </tr>
+                        <!-- More roles can be added here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Add New Role -->
+            <div class="add-role">
+                <h3>Add New Role</h3>
+                <form>
+                    <label for="role-name">Role Name:</label>
+                    <input type="text" id="role-name" name="role-name" required="">
+                    
+                    <label for="role-description">Description:</label>
+                    <textarea id="role-description" name="role-description" rows="4" required=""></textarea>
+                    
+                    <button type="submit" class="btn-primary">Add Role</button>
+                </form>
+            </div>
+        </section>
+        
+        <section class="members">
+            <h2>Manage Members</h2>
+            
+            <!-- Member List -->
+            <div class="member-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Member Name</th>
+                            <th>Status</th>
+                            <th>Last Attendance</th>
+                            <th>Roles Assigned</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dr. Surve</td>
+                            <td>Active</td>
+                            <td>2024-08-02</td>
+                            <td>Timer</td>
+                            <td>
+                                <button class="btn-secondary">Edit</button>
+                                <button class="btn-danger">Remove</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Krishnath</td>
+                            <td>active</td>
+                            <td>2024-07-15</td>
+                            <td>Speaker, leader</td>
+                            <td>
+                                <button class="btn-secondary">Edit</button>
+                                <button class="btn-danger">Remove</button>
+                            </td>
+                        </tr>
+                        <!-- More members can be added here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Add New Member -->
+            <div class="add-member">
+                <h3>Add New Member</h3>
+                <form>
+                    <label for="member-name">Member Name:</label>
+                    <input type="text" id="member-name" name="member-name" required="">
+                    
+                    <label for="member-status">Status:</label>
+                    <select id="member-status" name="member-status" required="">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                    
+                    <label for="last-attendance">Last Attendance Date:</label>
+                    <input type="date" id="last-attendance" name="last-attendance" required="">
+                    
+                    <label for="roles-assigned">Roles Assigned:</label>
+                    <input type="text" id="roles-assigned" name="roles-assigned" placeholder="e.g., Meeting Facilitator, Note Taker" required="">
+                    
+                    <button type="submit" class="btn-primary">Add Member</button>
+                </form>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer>
+        <p>© 2024 Role Tracking System</p>
+    </footer>
+
+
+    <script src="./Role Tracking System-Raw_UI_files/bootstrap.bundle.min.js.download" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+
+</body></html>

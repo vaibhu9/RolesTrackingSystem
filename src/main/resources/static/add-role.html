@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Role</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-home.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <style>
+        header {
+            padding: 30px;
+            border-radius: 10px;
+            height: 10px;
+            width: 100%;
+            font-size: 20px;
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+        }
+
+        header .logo {
+            font-size: 30px;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            /* align-items: center; */
+            margin-top: 15px;
+            width: 250px;
+            height: 100vh;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            border-right: 1px solid #ddd;
+            padding-top: 2rem;
+            position: fixed;
+        }
+
+        .sidebar .nav-link {
+            color: white;
+            /* font-weight: bold; */
+            font-size: 18px;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #6e45e2;
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #88d3ce;
+            color: white;
+            border-radius: 8px;
+        }
+
+        /* Main Content */
+        .content {
+            flex-grow: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        /* Hide sections initially */
+        #allocate-role-section,
+        #view-roles-section,
+        #add-role-section,
+        #view-allocated-role-section,
+        #automate-role-section {
+            display: none;
+        }
+
+        .active-section {
+            display: block !important;
+        }
+
+        .pair-container {
+            margin-right: 2rem;
+            padding: 30px;
+            width: 40rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dropdown-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .dropdown {
+            width: 48%;
+            padding: 5px;
+        }
+
+        .button {
+            width: 30%;
+            padding: 10px;
+            background-color: #2e4cd4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #2840aa;
+        }
+
+        .pair-list {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .pair-item {
+            padding: 5px;
+            background-color: #e7e7e7;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        /* Modal Background */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            /* Semi-transparent background */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Modal Header */
+        .modal-content h2 {
+            text-align: center;
+            color: #4a90e2;
+            /* Blue color */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-bottom: 20px;
+        }
+
+        /* Buttons */
+        button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #357ABD;
+        }
+
+        /* Roles List */
+        #rolesListId {
+            margin-top: 20px;
+        }
+
+        #rolesId {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #rolesId li {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+        }
+
+        #rolesId li input {
+            margin-right: 10px;
+        }
+
+        /* Custom Scrollbar for the Modal */
+        .modal-content {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        #backBtn {
+            width: 5rem;
+            background-color: #6e45e2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        /* Lighten or remove the dark overlay */
+        .modal-backdrop {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            /* Lighter overlay */
+        }
+
+        /* Adjust the modal to be centered and move it slightly down */
+        .modal-dialog {
+            position: fixed;
+            top: 50%;
+            /* Adjust the vertical position */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            /* Increase width */
+            max-width: 1000px;
+            /* Optional: limit max-width */
+        }
+
+        /* Additional modal styling (optional) */
+        .modal-content {
+            padding: 20px;
+            border-radius: 8px;
+            /* Optional: rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Optional: subtle shadow */
+        }
+
+        /* Meeting number input */
+        #meetingNumberInput {
+            width: 200px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid black;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        /* Meeting information container */
+        #meetingInformationContainer {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        #meetingInformationContainer ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        #meetingInformationContainer li {
+            margin-bottom: 5px;
+        }
+
+        /* Buttons */
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #automateRoleAllocationBtn {
+            background-color: #2ecc71;
+        }
+
+        #automateRoleAllocationBtn:hover {
+            background-color: #27ae60;
+        }
+
+        #rolesTableBody button {
+            background-color: blue;
+            width: 70px;
+            padding: 10px;
+        }
+
+        #automate-role-section .container {
+            margin-left: 0;
+            width: 800px;
+        }
+
+        #meetingInformationContainer {
+            width: 800px;
+        }
+
+        /* Updated and new styles for allocated roles table */
+        #view-allocated-role-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        .editable {
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+
+        .editable[contenteditable="true"] {
+            background-color: #e8f0fe;
+            border: 2px solid #4a90e2;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 2px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #357ABD;
+        }
+
+        .delete-btn {
+            background-color: #f44336;
+        }
+
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Role Tracker</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add-member.html">Members</a></li>
+                <li><a href="add-role.html">Roles</a></li>
+                <li><a href="Meeting.html">Meetings</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </nav>
+        <div class="profile">
+            <img src="images/profile.webp" alt="Profile">
+            <div class="dropdown">
+                <a href="Account.html">Account</a>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="d-flex" style="margin-top:5rem">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('allocate-role')">
+                        Allocate Roles
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('view-roles')">
+                        View All Roles
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('add-role')">
+                        Add New Role
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('automate-role')">
+                        Automate Role Assignment
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('view-allocated-role')">
+                        View Allocated Roles
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+        <!-- Content Sections -->
+        <div class="content mt-0">
+            <!-- Allocate Role Section -->
+            <div id="allocate-role-section" class="active-section" style="background-color: white;">
+                <div class="container"
+                    style="width: 1000px; color: black; border-radius: 10px; padding: 10px; border: 1px solid whitesmoke;">
+                    <h3 style="color: white; text-align: center; color: black;">Allocate Role to Member</h3>
+                </div>
+                <button id="chooseRolesBtn" class="big-button" style="width: 200px; padding: 10px;">Choose
+                    Roles</button>
+                <div class="d-flex">
+                    <div class="pair-container" style="margin-top:2em; background-color:rgb(255, 253, 253);">
+
+                        <!-- Allocation Form -->
+                        <div class="form-group">
+                            <label for="meetingNumber" style="font-size: 17px; font-weight: 500;">Meeting
+                                Number:</label>
+                            <input type="number" class="form-control" id="meetingNumber" name="meetingNumber" required>
+                            <button type="button" id="fetchMemberBtn">Fetch Members</button>
+                        </div>
+                        <div class="dropdown-container">
+                            <select id="memberSelect" class="dropdown">
+                                <!-- Members will be loaded here -->
+                            </select>
+                            <select id="roleSelect" class="dropdown">
+                                <!-- Roles will be loaded here -->
+                            </select>
+                        </div>
+                        <button type="button" class="button" onclick="addPair()">Add Pair</button>
+                        <div class="pair-list" id="pairList"></div>
+                        <button id="confirmButton" class="btn btn-primary" onclick="confirmAllocations()">Confirm
+                            Allocations
+                        </button>
+                    </div>
+
+                    <!-- Allocated Roles Display Section -->
+                    <div id="allocatedRolesContainerDisplay"
+                        style="padding: 20px; border: 1px solid #ddd; border-radius: 8px;  background-color:rgb(255, 253, 253); margin-top: 2rem;">
+                        <h6 style="font-size: 20px; font-weight: 500;">Check Already Allocated Roles for this Meeting:
+                        </h6>
+                        <div class="form-group">
+                            <label for="meetingNumber" style="font-weight: 500; font-size: 17px;">Enter Meeting
+                                Number:</label>
+                            <div class="d-flex">
+                                <input type="number" class="form-control" id="meetingNumberDisplay" name="meetingNumber"
+                                    required>
+                                <button id="fetchMemberBtn" class="roles-display"
+                                    onclick="fetchAllocatedRoles()">Enter</button>
+                            </div>
+                        </div>
+
+                        <div id="allocatedRolesDisplay"
+                            style="padding-top: 10px; font-size: 16px; font-family: 'Arial', sans-serif;">
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Modal for Role Selection -->
+                <div id="roleModal" class="modal">
+                    <div class="modal-content">
+                        <button id="backBtn">Back</button>
+                        <h2>Select Roles</h2>
+                        <button id="standardRoleBtn">Standard Roles</button>
+                        <button id="repetitiveRoleBtn">Repetitive Roles</button>
+
+                        <!-- Roles List - Initially Hidden -->
+                        <div id="rolesListId" style="display:none;">
+                            <ul id="rolesId"></ul>
+                        </div>
+
+                        <button id="confirmSelectionBtn">Confirm Selection</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Roles Section -->
+            <div id="view-roles-section" style="width: 100%;">
+                <div class="mx-2">
+                    <section class="roles" style="margin-top: 0;">
+                        <div class="container"
+                            style="width: 1000px; color: black; border-radius: 10px; padding: 10px; border: 1px solid whitesmoke;">
+                            <h3 style="color: white; text-align: center; color: black;">Manage Roles</h3>
+                        </div>
+                        <!-- <h2 style="text-align: center;">Manage Roles</h2> -->
+                        <!-- Role List -->
+                        <div class="role-list">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Role</th>
+                                        <th>Description</th>
+                                        <th>Created On(Date)</th>
+                                        <th>Created At(Time)</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rolesTableBody">
+                                    <!-- Roles will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Add Role Section -->
+            <div id="add-role-section" style="background-color: white; margin-top: 0;">
+                <div class="container"
+                    style="width: 1000px; color: black; border-radius: 10px; padding: 10px; border: 1px solid whitesmoke;">
+                    <h3 style="color: white; text-align: center; color: black;">Add New Role</h3>
+                </div>
+                <!-- <h2 style="text-align: center; margin-bottom: 2rem;">Add New Role</h2> -->
+                <div class="add-role col-md-12"
+                    style="margin-top: 0;  background-color:rgb(255, 253, 253); border: 1px solid rgb(192, 187, 187)">
+                    <!-- Add Role Form -->
+                    <form id="addWeekRoleForm">
+                        <label for="role-name">Role Name:</label>
+                        <input type="text" id="role-name" name="title" required>
+
+                        <label for="role-description">Description:</label>
+                        <textarea id="role-description" name="description" rows="4" required></textarea>
+
+                        <button type="submit" class="btn-primary">Add Role</button>
+                    </form>
+                </div>
+            </div>
+
+
+            <div id="view-allocated-role-section" style="margin-top: 0px;">
+                <div class="container"
+                    style="width: 1000px; color: black; border-radius: 10px; padding: 10px; border: 1px solid whitesmoke;">
+                    <h3 style="color: white; text-align: center; color: black;">View Roles</h3>
+                </div>
+                <table id="roles-table">
+                    <thead>
+                        <tr>
+                            <th>Allocation Number</th>
+                            <th>Member Number</th>
+                            <th>Role Name</th>
+                            <th>Meeting Number</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Roles will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+
+            <div id="automate-role-section">
+                <div class="container mt-4"
+                    style="width: 1000px; color: black; border-radius: 10px; padding: 10px; border: 1px solid whitesmoke;">
+                    <h3 style="text-align: center; color: black;">Automate Role Allocation</h3>
+                </div>
+                <button class="btn btn-primary" id="selectRolesAutomateBtn"
+                    style="background-color: rgb(94, 103, 233); padding: 10px; margin: 5px; color:white; font-weight: 400;">Select
+                    Roles for Meeting</button>
+
+                <!-- Modal for Role Selection (Updated) -->
+                <div class="modal" id="automateRoleModal" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Select Roles for Meeting</h5>
+                                <button type="button" class="btn-close" id="closeRoleModal"
+                                    aria-label="Close">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <h2>Select Roles</h2>
+                                <div class="btn-group mb-3" role="group" aria-label="Role type selection">
+                                    <button id="standardAutomateRoleBtn" class="btn btn-outline-primary">Standard
+                                        Roles</button>
+                                    <button id="repetitiveAutomateRoleBtn" class="btn btn-outline-primary">Repetitive
+                                        Roles</button>
+                                </div>
+
+                                <!-- Roles List - Initially Hidden -->
+                                <div id="rolesAutomateListId" style="display:none;">
+                                    <h3 id="currentRoleTypeDisplay"></h3>
+                                    <ul id="rolesAutomateId"></ul>
+                                    <button id="checkoutBtn" class="btn btn-success mt-3">Checkout</button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="closeRoleModalFooter">Close</button>
+                                <button type="button" class="btn btn-primary" id="confirmAutomateSelectionBtn">Confirm
+                                    Selection</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="roleCountModal" class="modal">
+                    <div class="modal-content">
+                        <h2>Player Count</h2>
+                        <p>How many players for role <span id="currentRoleName"></span>?</p>
+                        <input type="number" id="roleCountInput" min="1" value="1">
+                        <button id="confirmRoleCount">Confirm</button>
+                        <button id="cancelRoleCount">Cancel</button>
+                    </div>
+                </div>
+
+
+
+                <div class="d-block" style="margin-right:70rem;">
+                    <label for="meetingNumberInput"
+                        style="font-size: 20px; font-weight: 500; width: 500px; margin-top: 2rem;">Enter Meeting Number
+                        :
+                    </label>
+                    <input type="text" id="meetingNumberInput" placeholder="Enter meeting number">
+                    <div id="meetingInformationContainer" style="display: none;"></div>
+                    <button id="automateRoleAllocationBtn" style="display: none;">Automate Role Allocation</button>
+
+
+                    <h2 id="roleAllocationTitle" style="display: none;">Automated Role Allocation Results</h2>
+                    <table id="roleAllocationTable" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Member Number</th>
+                                <th>Role Name</th>
+                                <th>Meeting Number</th>
+                            </tr>
+                        </thead>
+                        <tbody id="roleAllocationBody">
+                            <!-- Table rows will be inserted here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Retrieve the saved section from localStorage
+            const savedSection = localStorage.getItem('activeSection') || 'allocate-role'; // Default to 'allocate-role'
+            showSection(savedSection);
+        });
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.getElementById('allocate-role-section').classList.remove('active-section');
+            document.getElementById('view-roles-section').classList.remove('active-section');
+            document.getElementById('add-role-section').classList.remove('active-section');
+            document.getElementById('automate-role-section').classList.remove('active-section');
+            document.getElementById('view-allocated-role-section').classList.remove('active-section');
+
+            // Show the selected section
+            document.getElementById(sectionId + '-section').classList.add('active-section');
+
+            // Save the active section to localStorage
+            localStorage.setItem('activeSection', sectionId);
+        }
+
+
+        let roles = []; // Array to store roles
+        let members = []; // Array to store members
+        let selectedStandardRoles = [];
+        let selectedRepetitiveRoles = {};
+        let currentRoleType = ''; // Variable to track the type of roles being selected
+        let assignedPairs = new Set(); // Set to store assigned member-role pairs
+        let meetingNumber;
+        let automateMember = [];
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            document.getElementById("fetchMemberBtn").addEventListener("click", fetchMembers);
+
+            // Get meeting number from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            meetingNumber = urlParams.get('meetingNumber');
+
+            if (meetingNumber) {
+                document.getElementById('meetingNumber').value = meetingNumber;
+
+                // Show popup
+                Swal.fire({
+                    title: 'Assign Roles',
+                    text: 'Would you like to assign roles for this meeting now?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, assign roles',
+                    cancelButtonText: 'No, I will do it later'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Scroll to the role assignment section
+                        document.querySelector('.pair-container').scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+
+            // Fetch and display roles in the modal and dropdown
+            function fetchRoles() {
+                fetch('http://localhost:8081/api/week-roles', { method: 'GET' })
+                    .then(response => response.json())
+                    .then(fetchedRoles => {
+                        roles = fetchedRoles; // Store roles in a global variable
+
+                        // Populate the roles dropdown with the combined list
+                        updateRoleDropdown();
+                    })
+                    .catch(error => console.error('Error fetching roles:', error));
+            }
+
+            // Fetch and display members in the modal and dropdown
+            function fetchMembers() {
+
+                let currentMeetingNumber = document.getElementById('meetingNumber').value;
+
+                console.log("Meeting number : ", currentMeetingNumber);
+
+                // if (!currentMeetingNumber) {
+                //     alert('Please enter a meeting number');
+                //     return;
+                // }
+
+
+
+                fetch(`http://localhost:8081/api/meeting-response/${currentMeetingNumber}`, { method: 'GET' })
+                    .then(response => response.json())
+                    .then(fetchedMembers => {
+                        members = fetchedMembers;
+                        automateMember = fetchedMembers;
+                        // Populate the members dropdown
+                        const transformedMembers = members.map(member => ({
+                            name: `${member.firstName} ${member.lastName}`,
+                            id: member.id
+                        }));
+                        populateDropdown('memberSelect', transformedMembers, 'name', 'id');
+                    })
+                    .catch(error => console.error('Error fetching members:', error));
+            }
+
+            // Combine selected roles into a single list
+            function getCombinedRolesList() {
+                let combinedRoles = [];
+
+                // Add selected standard roles to combined list
+                selectedStandardRoles.forEach(role => {
+                    combinedRoles.push({ roleName: role, id: role });
+                });
+
+                // Add selected repetitive roles to combined list
+                for (let [role, roleList] of Object.entries(selectedRepetitiveRoles)) {
+                    roleList.forEach(roleName => {
+                        combinedRoles.push({ roleName: roleName, id: roleName });
+                    });
+                }
+
+                return combinedRoles;
+            }
+
+            // Update the roles dropdown with the combined list
+            function updateRoleDropdown() {
+                const combinedRoles = getCombinedRolesList();
+                populateDropdown('roleSelect', combinedRoles, 'roleName', 'id');
+            }
+
+            // Populate dropdown
+            function populateDropdown(selectId, data, textField, valueField) {
+                const selectElement = document.getElementById(selectId);
+                selectElement.innerHTML = '';
+
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.textContent = item[textField];
+                    option.value = item[valueField];
+                    selectElement.appendChild(option);
+                });
+            }
+
+            function initializeRoles() {
+                document.getElementById('chooseRolesBtn').addEventListener('click', function () {
+                    document.getElementById('roleModal').style.display = 'block';
+                });
+
+                document.getElementById('standardRoleBtn').addEventListener('click', function () {
+                    currentRoleType = 'standard'; // Set type to 'standard'
+                    populateRoles('standard');
+                });
+
+                document.getElementById('repetitiveRoleBtn').addEventListener('click', function () {
+                    currentRoleType = 'repetitive'; // Set type to 'repetitive'
+                    populateRoles('repetitive');
+                });
+
+                // Back button functionality
+                document.getElementById('backBtn').addEventListener('click', function () {
+                    document.getElementById('roleModal').style.display = 'none'; // Close the modal
+                });
+
+
+
+                // Attach confirm button event listener only once
+                document.getElementById('confirmSelectionBtn').addEventListener('click', function () {
+                    const checkedRoles = document.querySelectorAll('#rolesId input[type="checkbox"]:checked');
+                    checkedRoles.forEach(roleItem => {
+                        let role = roleItem.value;
+                        if (currentRoleType === 'standard') {
+                            if (!selectedStandardRoles.includes(role)) {
+                                selectedStandardRoles.push(role);
+                            }
+                        } else if (currentRoleType === 'repetitive') {
+                            // Ask user for the number of players for the selected role
+                            const numberOfPlayers = parseInt(prompt(`How many players for role '${role}'?`), 10);
+                            if (isNaN(numberOfPlayers) || numberOfPlayers < 1) {
+                                alert('Please enter a valid number of players.');
+                                return;
+                            }
+
+                            // Generate role names with Roman numerals
+                            let roleList = [];
+                            for (let i = 1; i <= numberOfPlayers; i++) {
+                                roleList.push(`${role}-${toRoman(i)}`);
+                            }
+                            selectedRepetitiveRoles[role] = roleList;
+
+                            console.log(`Repetitive Role '${role}':`, roleList);
+                        }
+                    });
+
+                    // Log the arrays/objects to the console
+                    console.log('Selected Standard Roles:', selectedStandardRoles);
+                    console.log('Selected Repetitive Roles:', selectedRepetitiveRoles);
+
+                    // Update the role dropdown
+                    updateRoleDropdown();
+
+                    // Optionally hide the modal or perform other actions after confirmation
+                    document.getElementById('roleModal').style.display = 'none';
+                });
+            }
+
+            function populateRoles(type) {
+                let availableRoles = roles.filter(role => {
+                    if (type === 'standard') {
+                        return !selectedStandardRoles.includes(role.roleName);
+                    }
+                    return true; // All roles are available for repetitive
+                });
+
+                const rolesList = document.getElementById('rolesId');
+                rolesList.innerHTML = ''; // Clear previous roles
+                availableRoles.forEach(role => {
+                    let listItem = document.createElement('li');
+                    listItem.innerHTML = `<input type="checkbox" value="${role.roleName}">${role.roleName}`;
+                    rolesList.appendChild(listItem);
+                });
+
+                document.getElementById('rolesListId').style.display = 'block';
+            }
+
+            function toRoman(num) {
+                const roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+                return roman[num - 1];
+            }
+
+            // Fetch roles and members
+            fetchRoles();
+            fetchMembers();
+            initializeRoles();
+        });
+
+        // Retrieve the counter from localStorage, or initialize it if it doesn't exist
+        let allocationCounter = parseInt(localStorage.getItem('allocationCounter'), 10) || 1;
+
+        function generateUniqueAllocationNumber() {
+            return Date.now() + allocationCounter++;
+        }
+
+        function saveAllocationCounter() {
+            localStorage.setItem('allocationCounter', allocationCounter);
+        }
+
+        function addPair() {
+            const memberSelect = document.getElementById('memberSelect');
+            const roleSelect = document.getElementById('roleSelect');
+            const pairList = document.getElementById('pairList');
+
+            const selectedMemberId = memberSelect.value;
+            const selectedMemberName = memberSelect.options[memberSelect.selectedIndex].text;
+            const selectedRoleId = roleSelect.value;
+            const selectedRoleName = roleSelect.options[roleSelect.selectedIndex].text;
+
+            // Create a unique key for the member-role pair
+            const pairKey = `${selectedMemberId}-${selectedRoleId}`;
+
+            // Check if the pair is already assigned
+            if (assignedPairs.has(pairKey)) {
+                alert('This member has already been assigned this role.');
+                return;
+            }
+
+            // Add the pair to the assignedPairs set
+            assignedPairs.add(pairKey);
+
+            // Generate a unique long allocation number
+            const allocationNumber = generateUniqueAllocationNumber();
+
+
+            console.log('Selected Member ID:', selectedMemberName);  // Ensure this is correct
+            console.log('Selected Role ID:', selectedRoleId);      // Ensure this is correct
+
+            // Create a new pair item with data attributes for member and role IDs
+            const pairItem = document.createElement('div');
+            pairItem.className = 'pair-item';
+            pairItem.innerHTML = `${selectedMemberName} - ${selectedRoleName} <button class="remove-button" onclick="removePair(this)">Remove</button>`;
+            pairItem.dataset.allocationNumber = allocationNumber;  // Assign the unique allocation number
+            pairItem.dataset.memberId = selectedMemberName;  // Store member ID
+            pairItem.dataset.roleId = selectedRoleId;      // Store role ID
+            pairList.appendChild(pairItem);
+
+            // Remove the assigned role from the dropdown (by value)
+            for (let i = 0; i < roleSelect.options.length; i++) {
+                if (roleSelect.options[i].value === selectedRoleId) {
+                    roleSelect.remove(i);
+                    break;  // Exit the loop after removing the option
+                }
+            }
+
+            // Reset the dropdowns after adding the pair
+            memberSelect.selectedIndex = 0;
+            roleSelect.selectedIndex = 0;
+
+            // Save the updated counter to localStorage
+            saveAllocationCounter();
+        }
+
+
+        function removePair(button) {
+            const pairItem = button.parentElement;
+            const pairList = document.getElementById('pairList');
+            const roleSelect = document.getElementById('roleSelect');
+
+            // Retrieve the member and role IDs from the pair item
+            const memberId = pairItem.dataset.memberId;
+            const roleId = pairItem.dataset.roleId;
+
+            // Recreate the pairKey using the member and role IDs
+            const pairKey = `${memberId}-${roleId}`;
+
+            // Remove the pair from the assignedPairs set
+            assignedPairs.delete(pairKey);
+
+            // Extract role name from the pair item
+            const pairText = pairItem.innerHTML.split(" - ");
+            const roleText = pairText[1].split(' <button')[0].trim();
+
+            // Find and re-add the removed role to the dropdown if it's not already there
+            let roleAlreadyExists = false;
+            for (let i = 0; i < roleSelect.options.length; i++) {
+                if (roleSelect.options[i].text === roleText) {
+                    roleAlreadyExists = true;
+                    break;
+                }
+            }
+
+            if (!roleAlreadyExists) {
+                const newOption = document.createElement("option");
+                newOption.text = roleText;
+                newOption.value = roleId;  // Ensure the correct role ID is added back
+                roleSelect.add(newOption);
+            }
+
+            // Remove the pair item from the list
+            pairList.removeChild(pairItem);
+        }
+
+
+        function confirmAllocations() {
+            const meetingNumber = document.getElementById('meetingNumber').value;
+            const pairItems = document.querySelectorAll('#pairList .pair-item');
+
+            if (!meetingNumber) {
+                alert('Please enter a meeting number.');
+                return;
+            }
+
+            if (pairItems.length === 0) {
+                alert('Please add at least one member-role pair.');
+                return;
+            }
+
+            // Prepare the allocation data
+            const AllocateRoleRequest = [];
+            pairItems.forEach(pairItem => {
+                AllocateRoleRequest.push({
+                    allocationNumber: pairItem.dataset.allocationNumber,
+                    memberName: pairItem.dataset.memberId,  // Member ID stored in dataset
+                    roleName: pairItem.dataset.roleId,       // Role ID stored in dataset
+                    meetingNumber: meetingNumber
+                });
+            });
+
+            console.log('Allocations:', AllocateRoleRequest);  // Check allocation data in console
+
+
+            // Send POST request to save the allocations
+            fetch('http://localhost:8081/api/allocate-role/batch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(AllocateRoleRequest)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Roles allocated successfully.');
+                        // Clear the pair list and reset the form after successful allocation
+                        // document.getElementById('pairList').innerHTML = '';
+                        assignedPairs.clear();
+                        document.getElementById('meetingNumber').value = '';
+                    } else {
+                        return response.json().then(errorData => {
+                            alert('Error: ' + (errorData.message || 'Failed to allocate roles.'));
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while saving the allocations.');
+                });
+        }
+
+        // Function to fetch and display roles
+        function fetchRoles() {
+            fetch('http://localhost:8081/api/week-roles/all')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse the JSON data
+                })
+                .then(data => {
+                    const rolesTableBody = document.getElementById('rolesTableBody');
+                    rolesTableBody.innerHTML = ''; // Clear existing rows
+
+                    data.forEach(role => {
+                        const row = document.createElement('tr');
+                        row.setAttribute('data-role-name', role.title); // Set data attribute for easy access
+
+                        row.innerHTML = `
+                        <td>${role.title}</td>
+                        <td>${role.description}</td>
+                        <td>${new Date(role.timestamp).toLocaleDateString()}</td>
+                        <td>${new Date(role.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</td>
+
+                    <td class="d-flex">
+                        <button class="edit-btn" onclick="editRole('${role.title}')">Edit</button>
+                        <button class="delete-btn" onclick="deleteRole('${role.title}')">Delete</button>
+                    </td>
+                `;
+
+                        rolesTableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching roles:', error);
+                });
+        }
+
+
+
+        function editRole(roleTitle) {
+            const row = document.querySelector(`tr[data-role-name="${roleTitle}"]`);
+            if (row) {
+                const titleCell = row.querySelector('td:nth-child(1)');
+                const descriptionCell = row.querySelector('td:nth-child(2)');
+
+                const currentTitle = titleCell.textContent;
+                const currentDescription = descriptionCell.textContent;
+
+                titleCell.innerHTML = `<input type="text" class="edit-title" value="${currentTitle}">`;
+                descriptionCell.innerHTML = `<textarea class="edit-description">${currentDescription}</textarea>`;
+
+                const editButton = row.querySelector('.edit-btn');
+                editButton.textContent = 'Save';
+                editButton.onclick = () => saveRole(roleTitle);
+            }
+        }
+
+        function saveRole(originalTitle) {
+            const row = document.querySelector(`tr[data-role-name="${originalTitle}"]`);
+            if (row) {
+                const newTitle = row.querySelector('.edit-title').value;
+                const newDescription = row.querySelector('.edit-description').value;
+                const timestampCell = row.querySelector('td:nth-child(1)');
+
+                // Safely parse the date
+                let timestamp;
+                try {
+                    const dateObj = new Date(timestampCell.textContent);
+                    if (isNaN(dateObj.getTime())) {
+                        throw new Error('Invalid date');
+                    }
+                    timestamp = dateObj.toISOString();
+                } catch (error) {
+                    console.error('Error parsing date:', error);
+                    timestamp = new Date().toISOString(); // Use current date as fallback
+                }
+
+                const updatedRole = {
+                    title: newTitle,
+                    description: newDescription,
+                    timestamp: timestamp
+                };
+
+                updateRoleOnServer(originalTitle, updatedRole)
+                    .then(() => {
+                        row.querySelector('td:nth-child(1)').textContent = newTitle;
+                        row.querySelector('td:nth-child(2)').textContent = newDescription;
+                        row.setAttribute('data-role-name', newTitle);
+
+                        const saveButton = row.querySelector('.edit-btn');
+                        saveButton.textContent = 'Edit';
+                        saveButton.onclick = () => editRole(newTitle);
+                    })
+                    .catch(error => {
+                        console.error('Error updating role:', error);
+                        alert('Failed to update role. Please try again.');
+                    });
+            }
+        }
+
+        function updateRoleOnServer(originalTitle, updatedRole) {
+            return fetch(`http://localhost:8081/api/week-roles/${originalTitle}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedRole)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                });
+        }
+
+        // Function to handle deleting a role
+        function deleteRole(roleName) {
+            fetch(`http://localhost:8081/api/week-roles/${roleName}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete role');
+                    }
+                    return response; // Parse the response
+                })
+                .then(() => {
+                    // Remove the row from the table
+                    const row = document.querySelector(`tr[data-role-name="${roleName}"]`);
+                    if (row) {
+                        row.remove();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting role:', error);
+                });
+        }
+
+        // Call the function to fetch and display roles
+        fetchRoles();
+
+
+        //for display already allocated roles
+        function fetchAllocatedRoles() {
+            // Get the entered meeting number
+            const meetingNumber = document.getElementById('meetingNumberDisplay').value.trim();
+
+            console.log("Meeting Number : ", meetingNumber);
+
+            // Check if the meeting number is not empty
+            if (!meetingNumber) {
+                alert("Please enter a meeting number.");
+                return;
+            }
+
+            // Fetch allocated roles from the server
+            fetch(`http://localhost:8081/api/allocate-role/pair/${meetingNumber}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch allocated roles');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const rolesDisplayDiv = document.getElementById('allocatedRolesDisplay');
+                    rolesDisplayDiv.innerHTML = '';  // Clear previous data
+
+                    // Check if data is empty
+                    if (data.length === 0) {
+                        rolesDisplayDiv.innerHTML = '<p>No roles have been allocated for this meeting.</p>';
+                        return;
+                    }
+
+                    // Display each allocated role and member
+                    const table = document.createElement('table');
+
+                    // Create table header
+                    const thead = document.createElement('thead');
+                    thead.innerHTML = `
+            <tr>
+                <th>Member Number</th>
+                <th>Role Name</th>
+            </tr>
+        `;
+                    table.appendChild(thead);
+
+                    // Create table body
+                    const tbody = document.createElement('tbody');
+
+                    // Display each allocated role and member in table rows
+                    data.forEach(allocation => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                <td>${allocation.memberNumber}</td>
+                <td>${allocation.roleName}</td>
+            `;
+                        tbody.appendChild(row);
+                    });
+
+                    table.appendChild(tbody);
+                    rolesDisplayDiv.appendChild(table);
+                })
+                .catch(error => {
+                    console.error('Error fetching allocated roles:', error);
+                    alert('Error fetching allocated roles. Please try again.');
+                });
+        }
+
+        document.getElementById("addWeekRoleForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // Collect form data
+            const roleData = {
+                title: document.getElementById("role-name").value,
+                description: document.getElementById("role-description").value
+            };
+
+            // Send POST request to API
+            fetch('http://localhost:8081/api/week-roles', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(roleData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // If the response is successful
+                        alert("Role added successfully!");
+                        document.getElementById("addWeekRoleForm").reset();  // Reset the form after success
+                    } else {
+                        // If there is an error with the request
+                        throw new Error("Failed to submit the form. Status: " + response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while submitting the form.");
+                });
+        });
+
+
+
+        // Get modal elements
+        const roleModal = document.getElementById('automateRoleModal');
+        const membersModal = document.getElementById('automateMembersModal');
+        let roleCountModal;
+
+        // Get buttons to open modals
+        const selectRolesBtn = document.getElementById('selectRolesAutomateBtn');
+        const selectMembersBtn = document.getElementById('selectMembersAutomateBtn');
+
+        // Get buttons to close modals
+        const closeRoleModalBtns = document.querySelectorAll('#closeRoleModal, #closeRoleModalFooter');
+        const closeMembersModalBtns = document.querySelectorAll('#closeMembersModal, #closeMembersModalFooter');
+
+        let allRoles = [];
+        let selectedRoles = { repetitiveAutomateRoles: [], standardAutomateRoles: [] };
+        let currentAutomateRoleType = '';
+        let currentRoleForCount;
+        let meetingData = null;
+        let rolesForAutomate = [];
+        let FinalRoles = [];
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            document.getElementById('roleAllocationTable').style.display = 'none';
+
+            // Function to open the role modal
+            selectRolesBtn.addEventListener('click', () => {
+                roleModal.style.display = 'block';
+            });
+
+            // Function to close the role modal
+            closeRoleModalBtns.forEach(button => {
+                button.addEventListener('click', () => {
+                    roleModal.style.display = 'none';
+                });
+            });
+
+            function closeModal(modal) {
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            // Add new event listener for meeting number input
+            document.getElementById('meetingNumberInput').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    verifyMeetingNumber();
+                }
+            });
+
+            document.getElementById('automateRoleAllocationBtn').addEventListener('click', function () {
+                if (confirm('Do you want to automate role allocation based on this information?')) {
+                    automateRoleAllocation();
+                }
+            });
+
+
+            document.getElementById('standardAutomateRoleBtn').addEventListener('click', () => {
+                setActiveRoleType('standardAutomateRoles');
+                fetchAllRoles('standardAutomateRoles');
+            });
+
+            document.getElementById('repetitiveAutomateRoleBtn').addEventListener('click', () => {
+                setActiveRoleType('repetitiveAutomateRoles');
+                fetchAllRoles('repetitiveAutomateRoles');
+            });
+
+            document.getElementById('checkoutBtn').addEventListener('click', () => {
+                updateSelectedRoles();
+                if (currentAutomateRoleType === 'standardAutomateRoles') {
+                    setActiveRoleType('repetitiveAutomateRoles');
+                    fetchAllRoles('repetitiveAutomateRoles');
+                } else {
+                    clearRoleSelections();
+                }
+            });
+
+            document.getElementById('confirmAutomateSelectionBtn').addEventListener('click', () => {
+                updateSelectedRoles();
+                console.log('Final Selected Roles:', selectedRoles);
+                alert('Roles selection confirmed!');
+
+                closeModal(roleModal)
+            });
+
+            // Initialize role count modal
+            roleCountModal = document.getElementById('roleCountModal');
+
+            document.getElementById('confirmRoleCount').addEventListener('click', () => {
+                const count = parseInt(document.getElementById('roleCountInput').value);
+                addRepetitiveRole(currentRoleForCount, count);
+                roleCountModal.style.display = 'none';
+            });
+
+            document.getElementById('cancelRoleCount').addEventListener('click', () => {
+                removeRepetitiveRole(currentRoleForCount);
+                roleCountModal.style.display = 'none';
+            });
+        });
+
+        function setActiveRoleType(roleType) {
+            currentAutomateRoleType = roleType;
+            updateRoleTypeDisplay(roleType === 'standardAutomateRoles' ? 'Standard' : 'Repetitive');
+
+            // Update button styles
+            document.getElementById('standardAutomateRoleBtn').classList.toggle('active', roleType === 'standardAutomateRoles');
+            document.getElementById('repetitiveAutomateRoleBtn').classList.toggle('active', roleType === 'repetitiveAutomateRoles');
+        }
+
+        function updateRoleTypeDisplay(type) {
+            document.getElementById('currentRoleTypeDisplay').textContent = `Selecting ${type} Roles`;
+            document.getElementById('rolesAutomateListId').style.display = 'block';
+        }
+
+        function fetchAllRoles(roleType) {
+            fetch('http://localhost:8081/api/week-roles')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    allRoles = data;
+                    console.log(allRoles);
+                    categorizeAndDisplayRoles(roleType);
+                })
+                .catch(error => {
+                    console.error('Error fetching roles:', error);
+                });
+        }
+
+        function categorizeAndDisplayRoles(roleType) {
+            const rolesList = document.getElementById('rolesAutomateId');
+            rolesList.innerHTML = '';
+
+            allRoles.forEach(role => {
+                let listItem = document.createElement('li');
+                let checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = role.roleName;
+
+                if (roleType === 'repetitiveAutomateRoles') {
+                    checkbox.addEventListener('change', (event) => {
+                        if (event.target.checked) {
+                            promptForRoleCount(role.roleName);
+                        } else {
+                            removeRepetitiveRole(role.roleName);
+                        }
+                    });
+                    // Check if this role is already selected
+                    const existingRole = selectedRoles.repetitiveAutomateRoles.find(r => r.startsWith(`${role.roleName}-`));
+                    if (existingRole) {
+                        checkbox.checked = true;
+                    }
+                } else {
+                    checkbox.checked = selectedRoles[roleType].includes(role.roleName);
+                }
+
+                listItem.appendChild(checkbox);
+                listItem.appendChild(document.createTextNode(` ${role.roleName}`));
+                rolesList.appendChild(listItem);
+            });
+
+            document.getElementById('rolesAutomateListId').style.display = 'block';
+        }
+
+        function promptForRoleCount(roleName) {
+            currentRoleForCount = roleName;
+            document.getElementById('currentRoleName').textContent = roleName;
+            document.getElementById('roleCountInput').value = 1;
+            roleCountModal.style.display = 'block';
+        }
+
+        function addRepetitiveRole(roleName, count) {
+            selectedRoles.repetitiveAutomateRoles = selectedRoles.repetitiveAutomateRoles.filter(role => !role.startsWith(`${roleName}-`));
+
+            for (let i = 1; i <= count; i++) {
+                const romanNumeral = toRomanNumeral(i);
+                selectedRoles.repetitiveAutomateRoles.push(`${roleName}-${romanNumeral}`);
+            }
+            console.log('Selected Repetitive Roles in addRepetitiveRole:', selectedRoles.repetitiveAutomateRoles);
+            updateCheckboxState(roleName, true);
+        }
+
+        function toRomanNumeral(num) {
+            const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+            return romanNumerals[num - 1] || num.toString();
+        }
+
+        function removeRepetitiveRole(roleName) {
+            selectedRoles.repetitiveAutomateRoles = selectedRoles.repetitiveAutomateRoles.filter(role => !role.startsWith(`${roleName}-`));
+            updateCheckboxState(roleName, false);
+        }
+
+        function updateCheckboxState(roleName, checked) {
+            const checkbox = document.querySelector(`#rolesAutomateId input[value="${roleName}"]`);
+            if (checkbox) {
+                checkbox.checked = checked;
+            }
+        }
+
+        function updateSelectedRoles() {
+            if (currentAutomateRoleType === 'standardAutomateRoles') {
+                selectedRoles.standardAutomateRoles = [];
+                document.querySelectorAll('#rolesAutomateId input[type="checkbox"]:checked').forEach(checkbox => {
+                    selectedRoles.standardAutomateRoles.push(checkbox.value);
+                });
+            } else if (currentAutomateRoleType === 'repetitiveAutomateRoles') {
+                // Make sure not to overwrite repetitiveAutomateRoles
+                selectedRoles.repetitiveAutomateRoles = [...selectedRoles.repetitiveAutomateRoles];  // Keep existing roles
+                document.querySelectorAll('#rolesAutomateId input[type="checkbox"]:checked').forEach(checkbox => {
+                    if (!selectedRoles.repetitiveAutomateRoles.includes(checkbox.value)) {
+                        selectedRoles.repetitiveAutomateRoles.push(checkbox.value);
+                    }
+                });
+            }
+            console.log('Updated Selected Roles:', selectedRoles);
+        }
+
+        function clearRoleSelections() {
+            document.querySelectorAll('#rolesAutomateId input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            // if (currentAutomateRoleType === 'repetitiveAutomateRoles') {
+            //     selectedRoles.repetitiveAutomateRoles = [];
+            // }
+        }
+
+        function submitRoles() {
+            console.log('Selected Standard Roles:', selectedRoles.standardAutomateRoles);
+            console.log('Selected Repetitive Roles:', selectedRoles.repetitiveAutomateRoles);
+
+            fetch('/api/submitRoles', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(selectedRoles)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Roles submitted successfully');
+                    document.getElementById('rolesAutomateListId').style.display = 'none';
+                })
+                .catch(error => console.error('Error submitting roles:', error));
+        }
+
+
+        function fetchAvailableMembers() {
+
+            const meetingNumber = document.getElementById('meetingNumberInput').value;
+
+            fetch(`http://localhost:8081/api/meeting-response/${meetingNumber}`, { method: 'GET' })
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    automateMember = data;
+                    console.log("data : ", data);
+
+
+                    const infoContainer = document.getElementById('meetingInformationContainer');
+                    const membersListHTML = `
+
+                <h4>Available Members</h4>
+                <ul>
+                ${automateMember.map(member => `<li>${member.firstName} ${member.lastName}</li>`).join('')}
+                </ul>
+                `;
+
+                    // Append the member information to the same container
+                    infoContainer.innerHTML += membersListHTML;
+
+                    infoContainer.style.display = 'block';
+                    document.getElementById('automateRoleAllocationBtn').style.display = 'block';
+                })
+                .catch(error => console.error('Error fetching members:', error));
+        }
+
+        function verifyMeetingNumber() {
+
+            const meetingNumber = document.getElementById('meetingNumberInput').value;
+
+            fetch(`http://localhost:8081/api/meeting/${meetingNumber}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Invalid meeting number');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    meetingData = data;
+                    displayMeetingInformation();
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+
+
+        function displayMeetingInformation() {
+            console.log("automateMember:", automateMember);
+            console.log("selectedRoles:", selectedRoles);
+
+            const infoContainer = document.getElementById('meetingInformationContainer');
+
+            // Meeting information and selected roles
+            infoContainer.innerHTML = `
+        <h3>Meeting Information</h3>
+        <p>Number: ${meetingData.meetingNumber}</p>
+        <p>Date: ${meetingData.meetingDate}</p>
+        <p>Time: ${new Date(meetingData.meetingTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+        <p>Theme: ${meetingData.meetingTheme}</p>
+        <h4>Selected Roles</h4>
+        <ul>
+            ${selectedRoles.standardAutomateRoles.map(role => `<li>${role}</li>`).join('')}
+            ${selectedRoles.repetitiveAutomateRoles.map(role => `<li>${role}</li>`).join('')}
+        </ul>
+    `;
+
+            let rolesForAutomate = selectedRoles.repetitiveAutomateRoles.concat(selectedRoles.standardAutomateRoles);
+
+            rolesForAutomate = rolesForAutomate.map(role => ({ roleName: role }));
+
+            console.log('Roles for automation:', rolesForAutomate);
+
+            // Store rolesForAutomate into FinalRoles
+            FinalRoles = [];
+            FinalRoles.push(...rolesForAutomate);  // Spread syntax to add all elements of rolesForAutomate to FinalRoles
+
+            console.log('FinalRoles:', FinalRoles);
+
+            // Fetch and display members after displaying meeting information
+            fetchAvailableMembers();
+        }
+
+        function automateRoleAllocation() {
+
+            console.log("Roles in AutomateRoleAllocation ", FinalRoles);
+
+            const meetingNumber = document.getElementById('meetingNumberInput').value;
+
+            console.log("MEeting number ", meetingNumber);
+
+            const url = `http://localhost:8081/api/allocate-role/automate/${meetingNumber}`;
+
+            // Ensure rolesForAutomate is in the correct format
+            const rolesForAutomateFormatted = FinalRoles.map(role => ({ roleName: role.roleName }));
+
+            console.log("Roles before json : ", rolesForAutomateFormatted);
+
+            const jsonData = JSON.stringify(rolesForAutomateFormatted);
+
+            console.log("Json Data : ", jsonData);
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Role allocation response:', data);
+                    // Hide the input and button
+                    // document.getElementById('meetingNumberInput').style.display = 'none';
+                    // document.getElementById('automateRoleAllocationBtn').style.display = 'none';
+
+                    // Show the results title and table
+                    document.getElementById('roleAllocationTitle').style.display = 'block';
+                    document.getElementById('roleAllocationTable').style.display = 'table';
+
+                    // Display the allocation results
+                    displayRoleAllocations(data);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                    if (error instanceof TypeError) {
+                        console.error('This might be a CORS issue');
+                    }
+                    alert(`Role allocation failed: ${error.message}`);
+                });
+        }
+
+        function displayRoleAllocations(allocations) {
+            const tableBody = document.getElementById('roleAllocationBody');
+            tableBody.innerHTML = ''; // Clear existing content
+
+            allocations.forEach(allocation => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = allocation.memberNumber;
+                row.insertCell(1).textContent = allocation.roleName;
+                row.insertCell(2).textContent = allocation.meetingNumber;
+            });
+        }
+
+
+
+        let editingRow = null;
+
+        // Fetch and display roles
+        function fetchAllocatedRoles() {
+            fetch('http://localhost:8081/api/allocate-role')
+                .then(response => response.json())
+                .then(roles => {
+                    const tableBody = document.querySelector('#roles-table tbody');
+                    tableBody.innerHTML = '';
+                    roles.forEach(role => {
+                        const row = `
+                    <tr data-id="${role.allocationNumber}">
+                        <td>${role.allocationNumber}</td>
+                        <td class="editable" data-field="memberNumber">${role.memberNumber}</td>
+                        <td class="editable" data-field="roleName">${role.roleName}</td>
+                        <td class="editable" data-field="meetingNumber">${role.meetingNumber}</td>
+                        <td>
+                            <button onclick="editAllocatedRole(this)">Edit</button>
+                            <button class="delete-btn" onclick="deleteAllocatedRole(${role.allocationNumber})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error fetching roles:', error));
+        }
+
+        // Edit role
+        function editAllocatedRole(button) {
+            const row = button.closest('tr');
+
+            if (editingRow && editingRow !== row) {
+                cancelAllocatedEdit(editingRow);
+            }
+
+            if (button.textContent === 'Edit') {
+                editingRow = row;
+                const editableCells = row.querySelectorAll('.editable');
+                editableCells.forEach(cell => {
+                    cell.contentEditable = true;
+                    cell.focus();
+                });
+                button.textContent = 'Save';
+                button.nextElementSibling.textContent = 'Cancel';
+                button.nextElementSibling.classList.remove('delete-btn');
+            } else {
+                saveAllocatedRole(row);
+            }
+        }
+
+        // Save role
+        function saveAllocatedRole(row) {
+            const allocationNumber = row.dataset.id;
+            const updatedRole = {
+                memberNumber: row.querySelector('[data-field="memberNumber"]').textContent,
+                roleName: row.querySelector('[data-field="roleName"]').textContent,
+                meetingNumber: row.querySelector('[data-field="meetingNumber"]').textContent
+            };
+
+            fetch(`http://localhost:8081/api/allocate-role/${allocationNumber}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedRole)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update role');
+                    }
+                })
+                .then(() => {
+                    console.log('Role updated successfully');
+                    alert('Role updated successfully');
+                    const editableCells = row.querySelectorAll('.editable');
+                    editableCells.forEach(cell => {
+                        cell.contentEditable = false;
+                    });
+
+                    const editButton = row.querySelector('button');
+                    editButton.textContent = 'Edit';
+                    editButton.nextElementSibling.textContent = 'Delete';
+                    editButton.nextElementSibling.classList.add('delete-btn');
+                    editingRow = null;
+                })
+                .catch(error => {
+                    console.error('Error updating role:', error);
+                    cancelAllocatedEdit(row);
+                });
+        }
+
+        // Cancel edit
+        function cancelAllocatedEdit(row) {
+            if (!row) return;
+            const editableCells = row.querySelectorAll('.editable');
+            editableCells.forEach(cell => {
+                cell.contentEditable = false;
+                // Here you would typically revert the content to its original value
+                // For simplicity, we're just disabling editing without reverting
+            });
+
+            const editButton = row.querySelector('button');
+            editButton.textContent = 'Edit';
+            editButton.nextElementSibling.textContent = 'Delete';
+            editButton.nextElementSibling.classList.add('delete-btn');
+            editingRow = null;
+        }
+
+        // Delete role
+        function deleteAllocatedRole(allocationNumber) {
+            if (confirm('Are you sure you want to delete this role?')) {
+                fetch(`http://localhost:8081/api/allocate-role/${allocationNumber}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to delete role');
+                        }
+                    })
+                    .then(() => {
+                        console.log('Role deleted successfully');
+                        alert('Role deleted successfully')
+                        document.querySelector(`tr[data-id="${allocationNumber}"]`).remove();
+                    })
+                    .catch(error => console.error('Error deleting role:', error));
+            }
+        }
+
+        // Initial fetch
+        fetchAllocatedRoles();
+    </script>
+</body>
+
+</html>

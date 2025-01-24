@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <style>
+        header {
+            padding: 30px;
+            border-radius: 10px;
+            height: 10px;
+            width: 100%;
+            font-size: 20px;
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+        }
+
+        header .logo {
+            font-size: 30px;
+        }
+
+        header {
+            height: 10px;
+            width: 100%;
+            font-size: 20px;
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+        }
+
+        header .logo {
+            font-size: 30px;
+        }
+
+        .sidebar-item {
+            cursor: pointer;
+        }
+
+        .sidebar-item:hover {
+            background-color: #4a5568;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            border-radius: 10px;
+        }
+        
+    </style>
+</head>
+<header>
+    <div class="logo">Role Tracker</div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="add-member.html">Members</a></li>
+            <li><a href="add-role.html">Roles</a></li>
+            <li><a href="Meeting.html">Meetings</a></li>
+            <li><a href="reports.html">Reports</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+    </nav>
+    <div class="profile">
+        <img src="images/profile.webp" alt="Profile">
+        <div class="dropdown">
+            <a href="Account.html">Account</a>
+            <a href="#">Logout</a>
+        </div>
+    </div>
+</header>
+
+<body class="bg-gray-100" style="margin-top: 7rem;">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 sidebar text-white">
+            <nav>
+                <div class="sidebar-item p-4" style="font-size: 18px; font-weight: 470; margin-top: 25px;" onclick="showContent('add-meeting')">Add Meeting</div>
+                <div class="sidebar-item p-4" style="font-size: 18px; font-weight: 470; " onclick="showContent('view-meetings')">View Meetings</div>
+                <div class="sidebar-item p-4" style="font-size: 18px; font-weight: 470; " onclick="showContent('view-meeting-response')">View Meeting Response</div>
+                <div class="sidebar-item p-4" style="font-size: 18px; font-weight: 470; " onclick="showContent('view-meeting-info')">View Meeting Information</div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-10" style="background-color: white;">
+            <!-- Add Meeting Section -->
+            <div id="add-meeting" class="content" style="background-color: white; padding: 25px;">
+                <h2 style="font-size: 30px; font-weight: 500; text-align: center; color: black;">Schedule Meeting</h2>
+                <form id="meetingForm" class="space-y-4">
+                    <div>
+                        <label for="meetingNumber" class="block mb-1">Meeting Number:</label>
+                        <input type="number" id="meetingNumber" name="meetingNumber" required
+                            class="w-full p-2 border rounded">
+                    </div>
+                    <div>
+                        <label for="meetingTheme" class="block mb-1">Meeting Theme:</label>
+                        <input type="text" id="meetingTheme" name="meetingTheme" required
+                            class="w-full p-2 border rounded">
+                    </div>
+                    <div>
+                        <label for="meetingDate" class="block mb-1">Meeting Date:</label>
+                        <input type="date" id="meetingDate" name="meetingDate" required
+                            class="w-full p-2 border rounded">
+                    </div>
+                    <div>
+                        <label for="meetingTime" class="block mb-1">Meeting Time:</label>
+                        <input type="time" id="meetingTime" name="meetingTime" required
+                            class="w-full p-2 border rounded">
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Schedule</button>
+                </form>
+            </div>
+
+            <!-- View Meetings Section -->
+            <div id="view-meetings" class="content hidden">
+                <h2 class="text-2xl font-semibold mb-4" style="font-size: 30px; font-weight: 500; text-align: center; color: black;">View Meetings</h2>
+                <table class="w-full border-collapse border">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border p-2">Meeting ID</th>
+                            <th class="border p-2">Meeting Date</th>
+                            <th class="border p-2">Meeting Time</th>
+                            <th class="border p-2">Meeting Theme</th>
+                            <th class="border p-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="meetingTableBody">
+                        <!-- Meeting data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- View Meeting Response Section -->
+            <div id="view-meeting-response" class="content hidden">
+                <h2 class="text-2xl font-semibold mb-4" style="font-size: 30px; font-weight: 500; text-align: center; color: black;">View Meeting Response</h2>
+                <table class="w-full border-collapse border">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border p-2">Meeting Number</th>
+                            <th class="border p-2">Member Number</th>
+                            <th class="border p-2">Member Response</th>
+                            <th class="border p-2">Member Reason</th>
+                            <th class="border p-2">Time And Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="meetingResponseContent">
+                        <!-- Meeting data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="view-meeting-info" class="content">
+                <h2 class="text-2xl font-semibold mb-4" style="font-size: 30px; font-weight: 500; text-align: center; color: black;">View Meeting Information</h2>
+                
+                <div class="search-bar">
+                    <input type="text" id="meetingSearch" placeholder="Search for a meeting...">
+                </div>
+        
+                <div class="meeting-info">
+                    <h3>Meeting Details</h3>
+                    <p><strong>Meeting Number:</strong> <span id="meetingNumber"></span></p>
+                    <p><strong>Meeting Theme:</strong> <span id="meetingTheme"></span></p>
+                    <p><strong>Meeting Date:</strong> <span id="meetingDate"></span></p>
+                    <p><strong>Meeting Time:</strong> <span id="meetingTime"></span></p>
+                </div>
+        
+                <div id="rolesResponsesToggle" class="clickable">
+                    <h3>Roles and Member Responses (Click to expand)</h3>
+                </div>
+        
+                <div id="rolesResponsesContent" class="roles-responses hidden">
+                    <ul class="member-list" id="memberList">
+                        <!-- Member items will be dynamically added here -->
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function showContent(contentId) {
+            document.querySelectorAll('.content').forEach(element => {
+                element.classList.add('hidden');
+            });
+            document.getElementById(contentId).classList.remove('hidden');
+
+            if (contentId === 'view-meetings') {
+                loadMeetings();
+            } else if (contentId === 'view-meeting-response') {
+                loadMeetingOptions();
+            }else if(contentId === 'view-meeting-info'){
+                fetchMeetingData();
+            }
+        }
+
+        document.getElementById('meetingForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const meetingNumber = document.getElementById('meetingNumber').value;
+            const meetingDate = document.getElementById('meetingDate').value;
+            const meetingTime = document.getElementById('meetingTime').value;
+            const meetingTheme = document.getElementById('meetingTheme').value;
+            const meetingDateTime = `${meetingDate}T${meetingTime}`;
+
+            fetch('http://localhost:8081/api/meeting', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    meetingNumber,
+                    meetingDate: meetingDate,
+                    meetingTime: meetingDateTime,
+                    meetingTheme: meetingTheme
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Meeting scheduled successfully!');
+                    showContent('view-meetings');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error scheduling meeting. Please try again.');
+                });
+        });
+
+        function loadMeetings() {
+
+            fetch('http://localhost:8081/api/meeting')
+
+                .then(response => response.json())
+
+                .then(meetings => {
+
+                    const tableBody = document.getElementById('meetingTableBody');
+
+                    tableBody.innerHTML = '';
+
+                    meetings.forEach(meeting => {
+
+                        const row = `
+<tr data-meeting-id="${meeting.meetingNumber}">
+<td class="border p-2">${meeting.meetingNumber}</td>
+<td class="border p-2" contenteditable="false">${meeting.meetingDate}</td>
+<td class="border p-2" contenteditable="false">${new Date('1970-01-01T' + meeting.meetingTime.split('T')[1]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</td>
+<td class="border p-2" contenteditable="false">${meeting.meetingTheme || 'N/A'}</td>
+<td class="border p-2">
+<button onclick="toggleEdit(${meeting.meetingNumber})" class="bg-blue-500 text-white px-2 py-1 rounded mr-2">Edit</button>
+<button onclick="deleteMeeting(${meeting.meetingNumber})" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+</td>
+</tr>
+
+        `;
+
+                        tableBody.innerHTML += row;
+
+                    });
+
+                })
+
+                .catch(error => {
+
+                    console.error('Error:', error);
+
+                    alert('Error loading meetings. Please try again.');
+
+                });
+
+        }
+
+        function toggleEdit(meetingNumber) {
+
+            const row = document.querySelector(`tr[data-meeting-id="${meetingNumber}"]`);
+
+            const editButton = row.querySelector('button');
+
+            const cells = row.querySelectorAll('td[contenteditable]');
+
+            if (editButton.textContent === 'Edit') {
+
+                editButton.textContent = 'Save';
+
+                editButton.classList.remove('bg-blue-500');
+
+                editButton.classList.add('bg-green-500');
+
+                cells.forEach(cell => cell.contentEditable = "true");
+
+            } else {
+
+                editButton.textContent = 'Edit';
+
+                editButton.classList.remove('bg-green-500');
+
+                editButton.classList.add('bg-blue-500');
+
+                cells.forEach(cell => cell.contentEditable = "false");
+
+                // Gather updated data
+
+                const updatedMeeting = {
+
+                    meetingNumber: meetingNumber,
+
+                    meetingDate: cells[0].textContent,
+
+                    meetingTime: `${cells[0].textContent}T${cells[1].textContent}`,
+
+                    meetingTheme: cells[2].textContent
+
+                };
+
+                // Send update to server
+
+                updateMeeting(updatedMeeting);
+
+            }
+
+        }
+
+        function updateMeeting(meeting) {
+
+            fetch(`http://localhost:8081/api/meeting/${meeting.meetingNumber}`, {
+
+                method: 'PUT',
+
+                headers: {
+
+                    'Content-Type': 'application/json'
+
+                },
+
+                body: JSON.stringify(meeting)
+
+            })
+
+                .then(response => response.json())
+
+                .then(data => {
+
+                    alert('Meeting updated successfully!');
+
+                })
+
+                .catch(error => {
+
+                    console.error('Error:', error);
+
+                    alert('Error updating meeting. Please try again.');
+
+                });
+
+        }
+
+
+        function loadMeetingOptions() {
+            fetch('http://localhost:8081/api/meeting-response')
+                .then(response => response.json())
+                .then(meetings => {
+                    const tableBody = document.getElementById('meetingResponseContent');
+                    tableBody.innerHTML = '';
+                    meetings.forEach(meeting => {
+                        const row = `
+                        <tr>
+                            <td class="border p-2">${meeting.meetingNumber}</td>
+                            <td class="border p-2">${meeting.memberNumber}</td>
+                            <td class="border p-2">${meeting.response}</td>
+                            <td class="border p-2">${meeting.reason}</td>
+                            <td class="border p-2">
+                            ${new Date(meeting.timestmp).toLocaleDateString()} - 
+                            ${new Date(meeting.timestmp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                            </td>
+
+
+                        </tr>
+                    `;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error loading meeting responses. Please try again.');
+                });
+        }
+
+
+        function deleteMeeting(meetingNumber) {
+            if (confirm(`Are you sure you want to delete meeting ${meetingNumber}?`)) {
+                fetch(`http://localhost:8081/api/meeting/${meetingNumber}`, {
+                    method: 'DELETE'
+                })
+                    .then(data => {
+                        alert('Meeting deleted successfully!');
+                        loadMeetings();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error deleting meeting. Please try again.');
+                    });
+            }
+        }
+
+        // Initially show the Add Meeting section
+        showContent('add-meeting');
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch meeting data
+            fetchMeetingData();
+
+            // Search functionality
+            document.getElementById('meetingSearch').addEventListener('input', function(e) {
+                // Implement search logic here
+            });
+
+            // Toggle Roles and Member Responses
+            document.getElementById('rolesResponsesToggle').addEventListener('click', function() {
+                const content = document.getElementById('rolesResponsesContent');
+                content.classList.toggle('hidden');
+                this.querySelector('h3').textContent = content.classList.contains('hidden') 
+                    ? 'Roles and Member Responses (Click to expand)'
+                    : 'Roles and Member Responses (Click to collapse)';
+            });
+        });
+
+        function fetchMeetingData() {
+            fetch('http://localhost:8081/api/meeting/info')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayMeetingInfo(data);
+                    displayMemberList(data.members);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error.message);
+                    displayErrorMessage('Failed to load meeting information. Please try again later.');
+                });
+        }
+
+        function displayMeetingInfo(data) {
+            document.getElementById('meetingNumber').textContent = data.meetingNumber;
+            document.getElementById('meetingTheme').textContent = data.meetingTheme;
+            document.getElementById('meetingDate').textContent = data.meetingDate;
+            document.getElementById('meetingTime').textContent = data.meetingTime;
+        }
+
+        function displayMemberList(members) {
+            const memberList = document.getElementById('memberList');
+            memberList.innerHTML = '';
+
+            members.forEach(member => {
+                const li = document.createElement('li');
+                li.className = 'member-item';
+                li.innerHTML = `
+                    <div>${member.firstName} ${member.lastName} (${member.memberNumber})</div>
+                    <div class="member-details">
+                        <p><strong>Response:</strong> ${member.response}</p>
+                        <p><strong>Reason:</strong> ${member.reason || 'N/A'}</p>
+                    </div>
+                `;
+                li.addEventListener('click', function() {
+                    this.querySelector('.member-details').style.display = 
+                        this.querySelector('.member-details').style.display === 'none' ? 'block' : 'none';
+                });
+                memberList.appendChild(li);
+            });
+        }
+
+        function displayErrorMessage(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.style.color = 'red';
+            errorDiv.style.padding = '10px';
+            errorDiv.style.marginTop = '10px';
+            errorDiv.textContent = message;
+
+            const contentDiv = document.getElementById('view-meeting-info');
+            contentDiv.insertBefore(errorDiv, contentDiv.firstChild);
+        }
+    </script>
+</body>
+
+</html>

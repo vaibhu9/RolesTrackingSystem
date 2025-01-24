@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-home.css">
+    <style>
+        .login-container {
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            width: 300px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .btn-primary {
+            background-color: #2e4cd4;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background-color: #2840aa;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Member Login</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="memberNumber">Member Number:</label>
+                <input type="text" class="form-control" id="memberNumber" name="memberNumber" required>
+            </div>
+            <button type="submit" class="btn-primary">Login</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const memberNumber = document.getElementById('memberNumber').value;
+
+            fetch('http://localhost:8081/api/member/login', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ memberNumber })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to member dashboard
+                    window.location.href = `member-dashboard.html?memberNumber=${memberNumber}`;
+                } else {
+                    alert('Invalid member number');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error during login');
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Role Tracking System</title>
+    <link rel="stylesheet" href="style-home.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        header {
+            padding: 30px;
+            border-radius: 10px;
+            height: 10px;
+            width: 100%;
+            font-size: 20px;
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+        }
+
+        header .logo {
+            font-size: 30px;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            border-radius: 10px;
+            margin-top: 0;
+            color: #ecf0f1;
+            height: 150vh;
+            padding-top: 20px;
+        }
+
+        .sidebar h3 {
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        .sidebar .nav-link {
+            color: #ecf0f1;
+            border-radius: 0;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: #34495e;
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .card-I {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 0;
+            width: 1000px;
+            margin-left: 10px;
+            padding: 20px;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            color: white;
+            padding: 0;
+            padding: 5px;
+            margin: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            border-color: #3498db;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Role Tracker</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add-member.html">Members</a></li>
+                <li><a href="add-role.html">Roles</a></li>
+                <li><a href="Meeting.html">Meetings</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </nav>
+        <div class="profile">
+            <img src="images/profile.webp" alt="Profile">
+            <div class="dropdown">
+                <a href="Account.html">Account</a>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+    </header>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#reports">
+                                Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#member-responses">
+                                Member Responses
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#member-allocations">
+                                Member Allocations
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <h1 class="mb-4" style="text-align: center;">Reports Dashboard</h1>
+
+                <!-- Reports Section -->
+                <section id="reports">
+                    <div class="card-I">
+                        <div class="card-header" style="border-radius: 10px; text-align: center;">
+                            <h4>Reports</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-primary w-100" data-report="members">Members</button>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-primary w-100" data-report="meetings">Meetings</button>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-primary w-100" data-report="roles">Roles</button>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <button class="btn btn-primary w-100" data-report="allocate-roles">Allocate
+                                        Roles</button>
+                                </div>
+                            </div>
+                            <div id="report-content" class="mt-4"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Member Responses Section -->
+                <section id="member-responses">
+                    <div class="card-I">
+                        <div class="card-header" style="border-radius: 10px; text-align: center;">
+                            <h4>Member Responses</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-group mb-3">
+                                <input type="text" id="member-response-search" class="form-control"
+                                    placeholder="Search by name, member number, or phone number">
+                                <button class="btn btn-primary" onclick="searchMemberResponses()">Search</button>
+                            </div>
+                            <div id="member-response-results"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Member Allocations Section -->
+                <section id="member-allocations">
+                    <div class="card-I">
+                        <div class="card-header" style="border-radius: 10px; text-align: center;">
+                            <h4>Member Allocations</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-group mb-3">
+                                <input type="text" id="member-allocation-search" class="form-control"
+                                    placeholder="Search by name, member number, or phone number">
+                                <button class="btn btn-primary" onclick="searchMemberAllocations()">Search</button>
+                            </div>
+                            <div id="member-allocation-results"></div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function fetchReportData(endpoint) {
+            try {
+                const response = await fetch(endpoint);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching report data:', error);
+                return [];
+            }
+        }
+
+        function createTable(headers, rows) {
+            let table = '<table class="table table-striped"><thead><tr>';
+            headers.forEach(header => {
+                table += `<th>${header}</th>`;
+            });
+            table += '</tr></thead><tbody>';
+            rows.forEach(row => {
+                table += '<tr>';
+                row.forEach(cell => {
+                    table += `<td>${cell}</td>`;
+                });
+                table += '</tr>';
+            });
+            table += '</tbody></table>';
+            return table;
+        }
+
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            const formattedDate = date.toLocaleDateString();
+            const formattedTime = date.toLocaleTimeString();
+            return { date: formattedDate, time: formattedTime };
+        }
+
+        async function showReport(type) {
+            const reportContent = document.getElementById('report-content');
+            let headers = [];
+            let rows = [];
+            let endpoint = '';
+
+            switch (type) {
+                case 'members':
+                    endpoint = 'http://localhost:8081/api/member/all';
+                    headers = ['Member Number', 'First Name', 'Last Name', 'Phone Number', 'Email Address', 'Occupation', 'Date of Birth', 'Date of Joining', 'Ex Member'];
+                    break;
+                case 'meetings':
+                    endpoint = 'http://localhost:8081/api/meeting';
+                    headers = ['Meeting Number', 'Meeting Date', 'Meeting Time'];
+                    break;
+                case 'roles':
+                    endpoint = 'http://localhost:8081/api/week-roles/all';
+                    headers = ['Title', 'Description'];
+                    break;
+                case 'allocate-roles':
+                    endpoint = 'http://localhost:8081/api/allocate-role';
+                    headers = ['Allocation Number', 'Member Number', 'Role Name', 'Meeting Number', 'Date', 'Time'];
+                    break;
+                default:
+                    console.error('Unknown report type:', type);
+                    return;
+            }
+
+            const data = await fetchReportData(endpoint);
+
+            if (type === 'members') {
+                rows = data.map(member => [
+                    member.memberNumber,
+                    member.firstName,
+                    member.lastName,
+                    member.phoneNumber,
+                    member.emailAddress,
+                    member.occupation,
+                    member.dateOfBirth,
+                    member.dateOfJoining,
+                    member.isExMember ? 'Yes' : 'No'
+                ]);
+            } else if (type === 'meetings') {
+                rows = data.map(meeting => [
+                    meeting.meetingNumber,
+                    meeting.meetingDate,
+                    new Date('1970-01-01T' + meeting.meetingTime.split('T')[1]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
+                ]);
+            }
+            else if (type === 'roles') {
+                rows = data.map(role => [
+                    role.title,
+                    role.description,
+                ]);
+            } else if (type === 'allocate-roles') {
+                rows = data.map(allocation => {
+                    const timestamp = new Date(allocation.timestamp);
+                    const date = timestamp.toISOString().split('T')[0];
+                    const time = timestamp.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+
+                    return [
+                        allocation.allocationNumber,
+                        allocation.memberNumber,
+                        allocation.roleName,
+                        allocation.meetingNumber,
+                        date,
+                        time
+                    ];
+                });
+            }
+
+
+            reportContent.innerHTML = createTable(headers, rows);
+        }
+
+        async function searchMemberAllocations() {
+            const searchTerm = document.getElementById('member-allocation-search').value;
+            const endpoint = `http://localhost:8081/api/allocate-role/member/${searchTerm}`;
+            const data = await fetchReportData(endpoint);
+
+            const headers = ['Member Number', 'Role Name', 'Meeting Number'];
+            const rows = data.map(allocation => {
+                const { date, time } = formatTimestamp(allocation.timestamp);
+                return [
+                    allocation.memberNumber,
+                    allocation.roleName,
+                    allocation.meetingNumber,
+                ];
+            });
+
+            document.getElementById('member-allocation-results').innerHTML = createTable(headers, rows);
+        }
+
+        async function searchMemberResponses() {
+            const searchTerm = document.getElementById('member-response-search').value;
+            const endpoint = `http://localhost:8081/api/meeting-response/member/${searchTerm}`;
+            const data = await fetchReportData(endpoint);
+
+            const headers = ['Member Number', 'Meeting Number', 'Response', 'Reason', 'Time&Date'];
+            const rows = data.map(response => {
+                const { date, time } = formatTimestamp(response.timestamp);
+                return [
+                    response.memberNumber,
+                    response.meetingNumber,
+                    response.response,
+                    response.reason,
+                    response.timestmp
+                ];
+            });
+
+            document.getElementById('member-response-results').innerHTML = createTable(headers, rows);
+        }
+
+        // Event listeners for report buttons
+        document.querySelectorAll('[data-report]').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const reportType = event.target.getAttribute('data-report');
+                showReport(reportType);
+            });
+        });
+    </script>
+</body>
+
+</html>

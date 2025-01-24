@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Roles</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-home.css">
+    <style>
+        .pair-container {
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dropdown-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .dropdown {
+            width: 48%;
+            padding: 5px;
+        }
+
+        .button {
+            width: 30%;
+            padding: 10px;
+            background-color: #2e4cd4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #2840aa;
+        }
+
+        .pair-list {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .pair-item {
+            padding: 5px;
+            background-color: #e7e7e7;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Role Tracker</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add-member.html">Members</a></li>
+                <li><a href="add-role.html">Roles</a></li>
+                <li><a href="Meeting.html">Meetings</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </nav>
+        <div class="profile">
+            <img src="images/profile.webp" alt="Profile">
+            <div class="dropdown">
+                <a href="Account.html">Account</a>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+    </header>
+
+      <!-- Role-Member Pairing Section -->
+      <div class="pair-container" style="margin-top:5em">
+        <h3>Allocate Role to Member</h3>
+        <div class="dropdown-container">
+            <select id="memberSelect" class="dropdown">
+                <!-- Members will be loaded here -->
+            </select>
+            <select id="roleSelect" class="dropdown">
+                <!-- Roles will be loaded here -->
+            </select>
+        </div>
+        <button type="button" class="button" onclick="addPair()">Add Pair</button>
+        <div class="pair-list" id="pairList"></div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Function to fetch members from the API using fetch
+            function fetchMembers() {
+                fetch('http://localhost:8081/api/member', { method: 'GET' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Transform data to include memberName
+                        const transformedData = data.map(member => ({
+                            name: `${member.firstName} ${member.lastName}` // Concatenate firstName and lastName
+                        }));
+                        populateDropdown('memberSelect', transformedData, 'name');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching members:', error);
+                    });
+            }
+
+            // Function to fetch roles from the API using fetch
+            function fetchRoles() {
+                fetch('http://localhost:8081/api/week-roles', { method: 'GET' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const transformedData = data.map(role => ({
+                            roleName: role.roleName
+                        }));
+                        populateDropdown('roleSelect', transformedData, 'roleName');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching roles:', error);
+                    });
+            }
+
+
+            function fetchMembershipTitles() {
+                fetch('http://localhost:8081/api/membership', { method: 'GET' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const transformedData = data.map(membership => ({
+                            memberShipTitle: membership.memberShipTitle
+                        }));
+                        populateDropdown('memberShipTitle', data, 'memberShipTitle');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching membership titles:', error);
+                    });
+            }
+
+            // Function to populate a dropdown with fetched data
+            function populateDropdown(selectId, data, textField) {
+                const selectElement = document.getElementById(selectId);
+                selectElement.innerHTML = '';
+
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.textContent = item[textField];
+                    selectElement.appendChild(option);
+                });
+            }
+
+            // Initialize dropdowns when the page loads
+            fetchRoles();
+            fetchMembers();
+            fetchMembershipTitles();
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard</title>
+    <style>
+        header {
+            padding: 30px;
+            border-radius: 10px;
+            height: 10px;
+            width: 100%;
+            font-size: 20px;
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+        }
+
+        header .logo {
+            font-size: 30px;
+        }
+
+        .profile-section,
+        .meeting-section {
+            margin: 20px 0;
+        }
+
+        .profile-section h3,
+        .meeting-section h3 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        .profile-info,
+        .meeting-info {
+            padding: 10px;
+        }
+
+        .response-form {
+            margin-top: 20px;
+        }
+
+        .response-form textarea {
+            width: 100%;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .response-form button {
+            margin-right: 10px;
+        }
+
+        /* Close button styling */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Button styling */
+        button {
+            margin: 10px;
+            padding: 10px;
+            width: 100px;
+            cursor: pointer;
+        }
+
+
+
+        @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #5c6bc0;
+            --background-color: #f4f7f9;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: "Lato", sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 1500px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .dashboard-container:hover {
+            box-shadow: var(--hover-shadow);
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .dashboard-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .dashboard-content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .section h3 {
+            color: var(--primary-color);
+            font-size: 25px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        #profile-info,
+        #meeting-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            font-size: 20px;
+        }
+
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-item strong {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--secondary-color);
+        }
+
+        .meeting-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .meeting-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            width: 150px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .edit-response {
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        #previous-response {
+            font-size: 25px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                width: 95%;
+                border-radius: 12px;
+            }
+
+            .dashboard-header {
+                padding: 20px;
+            }
+
+            .dashboard-content {
+                padding: 20px;
+            }
+
+            .profile-info,
+            .meeting-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Ensure the dialog overlay covers the entire screen */
+        .dialog-overlay {
+            position: fixed;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* Style the dialog box */
+        .dialog-box {
+            background-color: white;
+            text-align: center;
+            top: 30%;
+            left: 40%;
+            font-size: large;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+        }
+
+        /* Style the close button */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Style the question text */
+        #meeting-question {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        /* Style the buttons container */
+        #response-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+
+        }
+
+        /* Style individual buttons */
+        #response-buttons button {
+            padding: 10px 20px;
+            font-size: 20px;
+            width: 150;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        #response-buttons button:hover {
+            transform: translateY(-2px);
+        }
+
+        #meeting-question {
+            font-size: 25px;
+            padding: 10px;
+            color: black;
+        }
+
+        /* Specific button styles */
+        #available-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #busy-btn {
+            background-color: #F44336;
+            color: white;
+        }
+
+        #tentative-btn {
+            background-color: #FFC107;
+            color: black;
+        }
+
+        #confirm-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        #cancel-btn {
+            background-color: #9E9E9E;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h2>Member Dashboard</h2>
+        </div>
+        <div class="dashboard-content">
+            <div class="section profile-section">
+                <h3>Profile Information</h3>
+                <div id="profile-info">
+                    <div class="info-item"><strong>Name:</strong> Aisha madhular</div>
+                    <div class="info-item"><strong>Email:</strong> aisha34@gmail.com</div>
+                    <div class="info-item"><strong>Phone:</strong> 9876543210</div>
+                    <div class="info-item"><strong>Occupation:</strong> architecture</div>
+                </div>
+            </div>
+            <div class="section meeting-section">
+                <h3>Upcoming Meetings</h3>
+                <div id="meeting-info">
+                    <div class="meeting-item">
+                        <p><strong>Meeting Number:</strong> 771</p>
+                        <p><strong>Date:</strong> 2024-09-20</p>
+                        <p><strong>Time:</strong> 10:44</p>
+                        <p><strong>Theme:</strong> null</p>
+                        <button>Respond</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="response-popup" class="response-form" style="display:none;">
+                <h3 id="meeting-question">Will you attend this meeting?</h3>
+                <div id="response-buttons">
+                    <button id="available-btn" onclick="submitResponse('Available')">Available</button>
+                    <button id="busy-btn" onclick="submitResponse('Busy')">Busy</button>
+                    <button id="tentative-btn" onclick="submitResponse('Tentative')">Tentative</button>
+                </div>
+                <!-- Hidden message asking to edit response -->
+                <div id="edit-message" style="display:none;"></div>
+
+                <!-- Edit response form (initially hidden) -->
+                <div id="edit-response" style="display: block;">
+                    <p style="font-size: 20px; font-weight: bold;">Previous Response: <span
+                            id="previous-response"></span></p>
+                    <button onclick="showResponseForm('edit')">Edit Your Response</button>
+                    <button onclick="">Cancel</button>
+                </div>
+
+                <div id="response-form" style="display:none;">
+                    <textarea id="reason" placeholder="Optional: Provide a reason"></textarea><br>
+                    <button onclick="confirmResponse()">Confirm</button>
+                    <button onclick="cancelResponse()">Cancel</button>
+                </div>
+            </div>
+
+
+            <!-- Dialog Box Structure -->
+            <div id="response-dialog" class="dialog-overlay" style="display: none;">
+                <div class="dialog-box">
+
+                    <h3 id="meeting-question">Will you attend this meeting?</h3>
+
+                    <div id="response-buttons" style="margin-bottom: 2rem;">
+                        <button id="available-btn" onclick="selectResponse('Available')">Available</button>
+                        <button id="busy-btn" onclick="selectResponse('Busy')">Busy</button>
+                        <button id="tentative-btn" onclick="selectResponse('Tentative')">Tentative</button>
+                    </div>
+                    <button id="confirm-btn" onclick="confirmEditResponse()">Confirm</button>
+                    <button id="cancel-btn" onclick="cancelResponse()">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const memberNumber = urlParams.get('memberNumber');
+
+        let currentMemberNumber = null;
+        let currentMeeting = null;
+
+
+        function fetchMemberDetails(memberNumber) {
+            currentMemberNumber = memberNumber;
+            fetch(`http://localhost:8081/api/member/${memberNumber}`)
+                .then(response => response.json())
+                .then(member => {
+                    document.getElementById('profile-info').innerHTML = `
+                        <p><strong>Name:</strong> ${member.firstName} ${member.lastName}</p>
+                        <p><strong>Email:</strong> ${member.emailAddress}</p>
+                        <p><strong>Phone:</strong> ${member.phoneNumber}</p>
+                        <p><strong>Occupation:</strong> ${member.occupation}</p>
+                    `;
+
+                    fetchMeetings(memberNumber);
+                    //checkPendingResponses(memberNumber);
+                })
+                .catch(error => {
+                    console.error('Error fetching member details:', error);
+                    document.getElementById('profile-info').innerHTML = 'Error loading profile information.';
+                });
+        }
+
+        function fetchMeetings(memberNumber) {
+            fetch(`http://localhost:8081/api/meeting`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(meetings => {
+                    const today = new Date();
+                    const upcomingMeetings = meetings.filter(meeting => {
+                        const meetingDate = new Date(meeting.meetingDate);
+                        return meetingDate >= today;
+                    });
+
+                    if (upcomingMeetings.length === 0) {
+                        document.getElementById('meeting-info').innerHTML = 'No upcoming meetings.';
+                    } else {
+                        let meetingHtml = '';
+                        upcomingMeetings.forEach(meeting => {
+                            const meetingTime = new Date(meeting.meetingTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                            meetingHtml += `
+                                <div>
+                                    <p><strong>Meeting Number:</strong> ${meeting.meetingNumber}</p>
+                                    <p><strong>Date:</strong> ${meeting.meetingDate}</p>
+                                    <p><strong>Time:</strong> ${meetingTime}</p>
+                                    <p><strong>Theme:</strong> ${meeting.meetingTheme}</p>
+                                    <button onclick="openResponsePopup(${meeting.meetingNumber})">Respond</button>
+                                    <hr />
+                                </div>
+                            `;
+                        });
+                        document.getElementById('meeting-info').innerHTML = meetingHtml;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching meetings:', error);
+                    document.getElementById('meeting-info').innerHTML = 'Error loading meeting information.';
+                });
+        }
+
+
+        function checkPendingResponses(memberNumber) {
+            fetch('/check-pending-responses', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: memberNumber }) // Replace with actual user ID
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.pending_meetings) {
+                        alert('You have pending meetings that require your response. Please respond to them.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking pending responses:', error);
+                });
+        }
+
+
+        function openResponsePopup(meetingNumber) {
+            currentMeeting = meetingNumber;
+            fetchResponse();
+            document.getElementById('response-popup').style.display = 'block'; // Ensure popup is visible
+            document.getElementById('response-form').style.display = 'none';  // Initially hide the form
+        }
+
+        function showResponseForm(response) {
+            document.getElementById('response-form').style.display = 'block';
+            window.currentResponse = response;
+        }
+
+        function submitResponse(response) {
+            currentResponse = response;
+            document.getElementById('response-buttons').style.display = 'none';
+            document.getElementById('response-form').style.display = 'block';
+        }
+
+
+
+        function confirmResponse() {
+            const reason = document.getElementById('reason').value;
+            fetch('http://localhost:8081/api/meeting-response', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    meetingNumber: currentMeeting,
+                    memberNumber: memberNumber,
+                    response: window.currentResponse,
+                    reason: reason
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert("Thank for your Response");
+                    document.getElementById('edit-response').style.display = 'block';
+                    document.getElementById('previous-response').innerText = currentResponse;
+                    document.getElementById('response-popup').style.display = 'none';
+                });
+        }
+
+
+        function fetchResponse() {
+            fetch(`http://localhost:8081/api/meeting-response/${currentMemberNumber}/${currentMeeting}`, {
+                method: 'GET', // Explicitly stating it's a GET request
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.response) {
+                        document.getElementById('response-buttons').style.display = 'none';
+                        document.getElementById('edit-response').style.display = 'block';
+                        document.getElementById('previous-response').innerText = data.response;
+
+
+                        document.getElementById('meeting-question').innerText = "Did you change your mind? Edit your response.";
+                        // Show a message asking if they want to edit the response
+                        document.getElementById('edit-message').style.display = 'block';
+
+                        //document.getElementById('edit-message')
+                    } else {
+                        document.getElementById('response-buttons').style.display = 'block';
+                        document.getElementById('edit-response').style.display = 'none';
+                        document.getElementById('edit-message').style.display = 'none';
+                    }
+                })
+                .catch(error => console.error('Error fetching previous response:', error));
+        }
+
+        if (memberNumber) {
+            fetchMemberDetails(memberNumber);
+        } else {
+            alert('Invalid member number.');
+        }
+
+
+
+
+        // Function to open the dialog box
+        function showResponseForm(mode) {
+            document.getElementById('response-dialog').style.display = 'block';
+
+            // Optionally, update the dialog for editing
+            if (mode === 'edit') {
+                let previousResponse = document.getElementById('previous-response').textContent;
+                document.getElementById('meeting-question').textContent = 'Edit your response:';
+                // Set the previous response if needed
+                console.log('Editing the response:', previousResponse);
+            }
+        }
+
+        // Function to close the dialog box
+        function closeDialog() {
+            document.getElementById('response-dialog').style.display = 'none';
+        }
+
+        function selectResponse(response) {
+            // Clear previously selected button (if any)
+            let buttons = document.querySelectorAll('#response-buttons button');
+            buttons.forEach(button => button.classList.remove('selected'));
+
+            // Add selected class to the clicked button
+            let selectedButton = document.querySelector(`#${response.toLowerCase()}-btn`);
+            selectedButton.classList.add('selected');
+
+            console.log('Selected response:', response);
+        }
+
+        // Function to confirm the edited response and send the update request
+        function confirmEditResponse() {
+            console.log('Response confirmed');
+
+
+            let selectedButton = document.querySelector('button.selected');
+            if (!selectedButton) {
+                console.log('No response selected!');
+                return;
+            }
+
+            let selectedResponse = selectedButton.textContent;
+
+
+            let payload = {
+                response: selectedResponse
+            };
+
+            // Send the update request using fetch
+            fetch(`http://localhost:8081/api/meeting-response/${currentMemberNumber}/${currentMeeting}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(data => {
+                    console.log('Response updated successfully:', data);
+                    // Update UI to show the meeting has been responded to
+                    document.getElementById('meeting-question').textContent = 'You have responded: ' + selectedResponse;
+                    document.getElementById('response-status').textContent = 'Responded';
+                    document.getElementById('previous-response').textContent = selectedResponse;
+                })
+                .catch(error => {
+                    console.error('Error updating response:', error);
+                })
+                .finally(() => {
+
+                    closeDialog();
+                });
+        }
+
+
+        // Function to cancel the response action
+        function cancelResponse() {
+            console.log('Response canceled');
+            closeDialog();
+        }
+    </script>
+</body>
+
+</html>

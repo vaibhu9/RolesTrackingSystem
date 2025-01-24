@@ -1,0 +1,194 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #0078d4;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+header .profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header .profile img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+header .dropdown a {
+    color: #fff;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+}
+
+.dashboard {
+    margin-bottom: 20px;
+}
+
+.summary-cards {
+    display: flex;
+    gap: 20px;
+}
+
+.card {
+    background: #f4f4f4;
+    border-radius: 8px;
+    padding: 15px;
+    flex: 1;
+    text-align: center;
+}
+
+.card h3 {
+    margin: 0;
+}
+
+.card p {
+    font-size: 24px;
+    margin: 5px 0 0;
+}
+
+.activity-chart {
+    margin: 20px 0;
+}
+
+.quick-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-primary {
+    background: #0078d4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: #005a9e;
+}
+
+footer {
+    background: #0078d4;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+/* Role List Table */
+.role-list table, .member-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.role-list th, .member-list th, .role-list td, .member-list td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.role-list th, .member-list th {
+    background-color: #f4f4f4;
+}
+
+.role-list tr:nth-child(even), .member-list tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+.add-role, .add-member {
+    background: #f4f4f4;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.add-role form, .add-member form {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-role label, .add-member label {
+    margin: 5px 0;
+}
+
+.add-role input, .add-member input, .add-role textarea, .add-member select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.add-role button, .add-member button {
+    background: #0078d4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.add-role button:hover, .add-member button:hover {
+    background: #005a9e;
+}

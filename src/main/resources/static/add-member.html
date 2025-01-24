@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Members</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-home.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        header {
+            padding: 30px;
+            border-radius: 10px;
+            height: 10px;
+            width: 100%;
+            font-size: 20px;
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+        }
+
+        header .logo {
+            font-size: 30px;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        header {
+            background-color: #5f9cf5;
+        }
+
+        .navbar,
+        .btn-primary {
+            background-color: #5f9cf5;
+            color: white;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #88d3ce;
+            border-color: #88d3ce;
+        }
+
+        .btn-primary:hover {
+            background-color: #88d3ce;
+            border-color: #88d3ce;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            margin-top: 15px;
+            width: 250px;
+            height: 100vh;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            border-right: 1px solid #ddd;
+            padding-top: 2rem;
+            position: fixed;
+        }
+
+        .sidebar .nav-link {
+            color: white;
+            /* font-weight: bold; */
+            margin-bottom: 1rem;
+            font-size: 18px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            width: 100%;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+            margin: 0;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #6e45e2;
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #88d3ce;
+            color: white;
+            border-radius: 8px;
+        }
+
+        .sidebar i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .content {
+            flex-grow: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        /* Adjust the content positioning when sidebar is present */
+        .d-flex {
+            display: flex;
+        }
+
+        /* Hide sections initially */
+        #search-section,
+        #add-member-section {
+            display: none;
+        }
+
+        /* Button styles for Edit and Delete */
+        button {
+            padding: 5px 10px;
+            border: none;
+            margin-top: 2px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: white;
+        }
+
+        /* Edit Button - Light Green */
+        button.edit-btn {
+            background-color: #28a745;
+        }
+
+        button.edit-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Delete Button - Light Red */
+        button.delete-btn {
+            background-color: #dc3545;
+        }
+
+        button.delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* For additional consistency across the buttons */
+        button:focus {
+            outline: none;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Modal Background */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black with opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            /* Width of the modal */
+            border-radius: 8px;
+        }
+
+        /* Close Button */
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Form Input Styles */
+        form input[type="text"],
+        form input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Save Button */
+        .save-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .save-btn:hover {
+            background-color: #45a049;
+        }
+
+        #view-deleted-members {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="mb-5">
+        <div class="logo">Role Tracker</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add-member.html">Members</a></li>
+                <li><a href="add-role.html">Roles</a></li>
+                <li><a href="Meeting.html">Meetings</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </nav>
+        <div class="profile">
+            <img src="images/profile.webp" alt="Profile">
+            <div class="dropdown">
+                <a href="Account.html">Account</a>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="d-flex" style="margin-top:5rem">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('search')">
+                        <i class="fas fa-users"></i> Search Members
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('view')">
+                        <i class="fas fa-users"></i> All Members
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('add')">
+                        <i class="fas fa-user-plus"></i> Add New Member
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('deleted')">
+                        <i class="fas fa-user-slash"></i> Deleted Members
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('response')">
+                        <i class="fas fa-user-check"></i> Member response
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="container content">
+            <!-- Search Members Section -->
+            <div id="search-section">
+                <h2 class="text-center mb-4">Search Members</h2>
+                <div class="input-group mb-4" style="justify-content: space-around;">
+                    <div><input style="padding: 10px;" type="text" class="form-control" id="searchMemberNumber"
+                            placeholder="Member Number"> </div>
+                    <div><input style="padding: 10px;" type="text" class="form-control" id="searchFirstName"
+                            placeholder="First Name"></div>
+                    <div><input style="padding: 10px;" type="text" class="form-control" id="searchLastName"
+                            placeholder="Last Name"></div>
+                    <div><input style="padding: 10px;" type="text" class="form-control" id="searchPhoneNumber"
+                            placeholder="Phone Number"></div>
+                    <div><input style="padding: 10px;" type="text" class="form-control" id="searchEmailAddress"
+                            placeholder="Email Address"></div>
+                    <div style="margin-top: 10px;"><button class="btn btn-primary" style="width: 500px; padding: 10px;"
+                            onclick="searchMember()">Search</button></div>
+                </div>
+
+                <div id="searchResults">
+                    <h3>Search Results</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Member Number</th>
+                                <th>Full Name</th>
+                                <th>Phone Number</th>
+                                <th>Email Address</th>
+                                <th>Occupation</th>
+                                <th>Date of Birth</th>
+                                <th>Date of Joining</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody">
+                            <!-- Results will be populated here -->
+                        </tbody>
+                    </table>
+                    <div id="memberMeetingResponses">
+                        <h4>Upcoming Meetings & Responses</h4>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Meeting Number</th>
+                                    <th>Meeting Date</th>
+                                    <th>Response</th>
+                                    <th>Reason</th>
+                                    <th>Actions</th>
+                                    <th>Previous Response</th>
+                                </tr>
+                            </thead>
+                            <tbody id="meetingResponsesBody">
+                                <!-- Meeting responses will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add New Member Section -->
+            <div id="add-member-section" style="background-color: white;">
+                <h2 class="text-center mb-4">Add New Member</h2>
+                <form id="addMemberForm">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="firstName" class="form-label">First Name:</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lastName" class="form-label">Last Name:</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6" style="margin-top: 7px;">
+                            <label for="phoneNumber" class="form-label">Phone Number:</label>
+                            <input type="tel" class="form-control" id="phoneNumber" style="padding: 12px;"
+                                name="phoneNumber" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="emailAddress" class="form-label">Email Address:</label>
+                            <input type="email" class="form-control" id="emailAddress" name="emailAddress" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="occupation" class="form-label">Occupation:</label>
+                            <input type="text" class="form-control" id="occupation" name="occupation">
+                        </div>
+                        <div class="col-md-6" style="margin-top: 7px;">
+                            <label for="dateOfBirth" class="form-label">Date of Birth:</label>
+                            <input type="date" class="form-control" id="dateOfBirth" style="padding: 12px;"
+                                name="dateOfBirth" required>
+                            <div class="invalid-feedback">Member should be above 17 years of age. Please enter a valid
+                                birthdate.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="dateOfJoining" class="form-label">Date of Joining:</label>
+                            <input type="date" class="form-control" id="dateOfJoining" name="dateOfJoining"
+                                style="padding: 12px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="isExMember" class="form-label">Is Ex-Member:</label>
+                            <select class="form-select" id="isExMember" name="isExMember" required
+                                style="padding: 12px;">
+                                <option value="" disabled selected>Select an option</option>
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                            <div class="invalid-feedback">Please select whether the member is an ex-member.</div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <!-- <div class="col-md-6">
+                            <label for="membershipCycle" class="form-label">Membership Cycle:</label>
+                            <select class="form-select" id="membershipCycle" name="membershipCycle" required>
+                                <option value="" disabled selected>Select an option</option>
+                                <option value="Feb-July 2024">Feb-July 2024</option>
+                                <option value="Aug-Jan 2024">Aug-Jan 2024</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a Membership Cycle.</div>
+                        </div> -->
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary w-100" style="padding: 10px;">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- View All Members Section -->
+            <div id="view-all-members-section">
+                <h2 class="text-center mb-4">All Members</h2>
+                <button class="btn btn-primary mb-4" onclick="fetchAllMembers()">Fetch All Members</button>
+                <div id="allMembersResults">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Member Number</th>
+                                <th>Full Name</th>
+                                <th>Phone Number</th>
+                                <th>Email Address</th>
+                                <th>Occupation</th>
+                                <th>Date of Birth</th>
+                                <th>Ex-Member</th>
+                                <th>Date of Joining</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="allMembersBody">
+                            <!-- All members will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- Edit Member Modal -->
+            <div id="editModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close-btn" id="closeEditModal">&times;</span>
+                    <h2>Edit Member</h2>
+
+                    <!-- Edit Member Form -->
+                    <form id="editMemberForm">
+                        <input type="hidden" id="editMemberId" name="editMemberId" />
+
+                        <label for="editFirstName">First Name</label>
+                        <input type="text" id="editFirstName" name="editFirstName" required />
+
+                        <label for="editLastName">Last Name</label>
+                        <input type="text" id="editLastName" name="editLastName" required />
+
+                        <label for="editPhoneNumber">Phone Number</label>
+                        <input type="text" id="editPhoneNumber" name="editPhoneNumber" required />
+
+                        <label for="editEmailAddress">Email Address</label>
+                        <input type="email" id="editEmailAddress" name="editEmailAddress" required />
+
+                        <label for="editOccupation">Occupation</label>
+                        <input type="text" id="editOccupation" name="editOccupation" />
+
+                        <button type="button" id="saveEditBtn" class="save-btn">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
+
+
+            <!--        deleted members report section-->
+            <div id="view-deleted-members">
+                <h2 class="text-center mb-4">Deleted Members</h2>
+                <button class="btn btn-primary mb-4" onclick="fetchAllDeletedMembers()">Fetch Deleted Members</button>
+                <div id="deletedMembersResults">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Member Number</th>
+                                <th>Full Name</th>
+                                <th>Phone Number</th>
+                                <th>Email Address</th>
+                                <th>Occupation</th>
+                                <th>Date of Birth</th>
+                                <th>Ex-Member</th>
+                                <th>Date of Joining</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="deletedMembersBody">
+                            <!-- All members will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- View Member Response -->
+            <div id="view-member-response" style="display: none;">
+                <h1>Upcoming Meetings & Responses</h1>
+                <input type="text" id="searchInput" placeholder="Search...">
+                <table id="meetingsTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Meeting Number</th>
+                            <th>Meeting Date</th>
+                            <th>Meeting Time</th>
+                            <th>Member Name</th>
+                            <th>Member Last Name</th>
+                            <th>Member Number</th>
+                            <th>Response</th>
+                            <th>Reason</th>
+                            <th>Actions</th>
+                            <th>Previous Response</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Retrieve the saved section from localStorage
+            const savedSection = localStorage.getItem('activeSection') || 'search'; // Default to 'search'
+            showSection(savedSection);
+        });
+        // Show the appropriate section based on user's selection
+        function showSection(section) {
+            document.getElementById('search-section').style.display = (section === 'search') ? 'block' : 'none';
+            document.getElementById('add-member-section').style.display = (section === 'add') ? 'block' : 'none';
+            document.getElementById('view-all-members-section').style.display = (section === 'view') ? 'block' : 'none';
+            document.getElementById('view-deleted-members').style.display = (section === 'deleted') ? 'block' : 'none';
+            document.getElementById('view-member-response').style.display = (section === 'response') ? 'block' : 'none';
+
+            localStorage.setItem('activeSection', section);
+        }
+
+        // Example function to simulate search results for Search Members
+        function searchMember() {
+            const searchResults = document.getElementById('searchResults');
+            const resultsBody = document.getElementById('resultsBody');
+
+            // Get values from input fields
+            const memberNumber = document.getElementById('searchMemberNumber').value.trim();
+            const firstName = document.getElementById('searchFirstName').value.trim();
+            const lastName = document.getElementById('searchLastName').value.trim();
+            const phoneNumber = document.getElementById('searchPhoneNumber').value.trim();
+            const emailAddress = document.getElementById('searchEmailAddress').value.trim();
+
+            // Define the search criteria object
+            const searchCriteria = {
+                memberNumber: memberNumber || undefined,
+                firstName: firstName || undefined,
+                lastName: lastName || undefined,
+                phoneNumber: phoneNumber ? parseInt(phoneNumber, 10) : undefined,
+                emailAddress: emailAddress || undefined
+            };
+
+            // Log search criteria for debugging
+            console.log('Search Criteria:', searchCriteria);
+
+            // Make the POST request
+            fetch('http://localhost:8081/api/member/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(searchCriteria)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Data received:', data); // Log the data received
+
+                    resultsBody.innerHTML = '';
+
+                    // Check if data is an array
+                    if (Array.isArray(data)) {
+                        data.forEach(member => {
+                            addMemberRow(member);
+                        });
+                    } else {
+                        // If the data is not an array, assume it's a single object and convert it to an array
+                        addMemberRow(data);
+                    }
+
+                    // Function to show resulted row of table
+                    function addMemberRow(member) {
+                        const resultsBody = document.getElementById('resultsBody'); // Assuming resultsBody is your table body
+                        fetchUpcomingMeetings(member.memberNumber)
+                        const row = document.createElement('tr');
+                        row.setAttribute('data-member-number', member.memberNumber);
+
+                        row.innerHTML = `
+                    <td>${member.memberNumber}</td>
+                    <td>${member.firstName} ${member.lastName}</td>
+                    <td>${member.phoneNumber}</td>
+                    <td>${member.emailAddress}</td>
+                    <td>${member.occupation || 'N/A'}</td>
+                    <td>${new Date(member.dateOfBirth).toLocaleDateString() || 'N/A'}</td>
+                    <td>${new Date(member.dateOfJoining).toLocaleDateString() || 'N/A'}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editMember('${member.memberNumber}')">Edit</button>
+                        <button class="delete-btn" onclick="deleteMember('${member.memberNumber}')">Delete</button>
+                    </td>
+                    `;
+                        resultsBody.appendChild(row);
+                    }
+
+                    searchResults.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error fetching member data:', error);
+                    searchResults.style.display = 'block'; // Show the results section even on error
+                    resultsBody.innerHTML = `<tr><td colspan="9">Member not found with given key,
+        Please try another key</td></tr>`;
+                });
+        }
+
+
+        let upcomingMeetings = [];
+
+        // Function to fetch upcoming meetings for the member
+        async function fetchUpcomingMeetings(memberNumber) {
+            try {
+                const response = await fetch('http://localhost:8081/api/meeting');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                upcomingMeetings = await response.json();
+                console.log("Upcoming meetings : ", upcomingMeetings);
+                displayUpcomingMeetings(upcomingMeetings, memberNumber);
+            } catch (error) {
+                console.error('Error fetching upcoming meetings:', error);
+            }
+        }
+
+        async function fetchMeetingResponse(meetingNumber, memberNumber) {
+            const response = await fetch(`http://localhost:8081/api/meeting-response/${memberNumber}/${meetingNumber}`);
+
+            if (response.ok) {
+                const text = await response.text();
+                // Check if the response text is not empty and parse it
+                return text ? JSON.parse(text) : null; // Return null if the response is empty
+            }
+
+            return null; // No response found
+        }
+
+
+
+        // Function to display fetched meetings in the table
+        async function displayUpcomingMeetings(upcomingMeetings, memberNumber) {
+            const meetingResponsesBody = document.getElementById('meetingResponsesBody');
+            meetingResponsesBody.innerHTML = '';
+
+            const today = new Date().toISOString().split('T')[0];
+
+            for (const meeting of upcomingMeetings) {
+                if (meeting.meetingDate >= today) {
+                    // Fetch the previous response for this meeting
+                    const previousResponse = await fetchMeetingResponse(meeting.meetingNumber, memberNumber);
+                    const previousResponseText = previousResponse
+                        ? `Response: ${previousResponse.response} on ${new Date(previousResponse.timestmp).toLocaleDateString('en-US')} at ${new Date(previousResponse.timestmp).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}`
+                        : 'No response yet';
+
+                    const meetingRow = document.createElement('tr');
+                    meetingRow.innerHTML = `
+                <td>${meeting.meetingNumber}</td>
+                <td>${meeting.meetingDate}</td>
+                <td>
+                    <select id="responseSelect-${meeting.meetingNumber}" onchange="updateMeetingResponse(${meeting.meetingNumber}, this.value)" style="padding:2px">
+                        <option value="available" ${previousResponse?.response === 'Available' ? 'selected' : ''}>Available</option>
+                        <option value="busy" ${previousResponse?.response === 'Busy' ? 'selected' : ''}>Busy</option>
+                        <option value="tentative" ${previousResponse?.response === 'Tentative' ? 'selected' : ''}>Tentative</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" id="reasonInput-${meeting.meetingNumber}" placeholder="Reason (if busy or tentative)" style="display:none; padding:2px;" />
+                </td>
+                <td><button onclick="saveMeetingResponse(${meeting.meetingNumber}, '${memberNumber}')" style="background-color:green;">Save</button></td>
+                <td>${previousResponseText}</td>
+            `;
+
+                    meetingResponsesBody.appendChild(meetingRow);
+
+                    // Show/hide reason input based on selection
+                    const responseSelect = document.getElementById(`responseSelect-${meeting.meetingNumber}`);
+                    const reasonInput = document.getElementById(`reasonInput-${meeting.meetingNumber}`);
+
+                    responseSelect.addEventListener('change', function () {
+                        if (this.value === 'busy' || this.value === 'tentative') {
+                            reasonInput.style.display = 'block';
+                        } else {
+                            reasonInput.style.display = 'none';
+                        }
+                    });
+
+                    // If the previous response is busy or tentative, show the reason input
+                    if (previousResponse?.response === 'busy' || previousResponse?.response === 'tentative') {
+                        reasonInput.style.display = 'block';
+                    }
+                }
+            }
+        }
+
+
+        function updateMeetingResponse(meetingNumber, response) {
+            // Prepare data for updating the response locally (optional, if needed)
+            console.log(`Updating meeting ${meetingNumber} response to ${response}`);
+
+            // Optionally, you could store this change locally before saving:
+            const meeting = {
+                meetingNumber: meetingNumber,
+                response: response,
+            };
+
+            // Update logic can be enhanced if needed (for UI feedback, etc.)
+        }
+
+        function saveMeetingResponse(meetingNumber, memberNumber) {
+            // Get the selected response
+            const selectedResponse = document.querySelector(`select#responseSelect-${meetingNumber}`).value;
+
+            // Get the reason only if busy or tentative is selected
+            let reason = '';
+            if (selectedResponse === 'busy' || selectedResponse === 'tentative') {
+                reason = document.querySelector(`#reasonInput-${meetingNumber}`).value;
+            }
+
+            const requestData = {
+                meetingNumber: meetingNumber,
+                memberNumber: memberNumber,
+                response: selectedResponse,
+                reason: reason,  // Include reason if applicable
+                timestmp: new Date().toISOString(),
+            };
+
+            // API call to save the response
+            fetch(`http://localhost:8081/api/meeting-response/${memberNumber}/${meetingNumber}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(`Response saved successfully for meeting ${meetingNumber}:`, data);
+                    displayUpcomingMeetings(upcomingMeetings, memberNumber);
+                })
+                .catch(error => {
+                    console.error('Error saving response:', error);
+                });
+        }
+
+        let meetingsData = [];
+
+        // Replace the mock data with this function
+        async function fetchMeetingsData() {
+            try {
+                const response = await fetch('http://localhost:8081/api/meeting-response/upcoming');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                meetingsData = data;
+                return data;
+            } catch (error) {
+                console.error('Error fetching meetings data:', error);
+                return [];
+            }
+        }
+
+        async function initializeTable() {
+            const meetingsData = await fetchMeetingsData();
+            renderTable(meetingsData);
+        }
+
+
+        const tableBody = document.querySelector('#meetingsTable tbody');
+        const searchInput = document.getElementById('searchInput');
+
+        function renderTable(data) {
+            tableBody.innerHTML = '';
+            data.forEach(meeting => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${meeting.meetingNumber}</td>
+                    <td>${meeting.meetingDate}</td>
+                    <td>${new Date(meeting.meetingTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</td>
+                    <td>${meeting.meetingTheme}</td>
+                    <td>${meeting.firstName} ${meeting.lastName}</td>
+                    <td>${meeting.memberNumber}</td>
+                    <td>
+                        <select class="response-select" data-meeting-id="${meeting.meetingNumber}">
+                            <option value="">Select</option>
+                            <option value="Available" ${meeting.response === 'Available' ? 'selected' : ''}>Available</option>
+                            <option value="Busy" ${meeting.response === 'Busy' ? 'selected' : ''}>Busy</option>
+                            <option value="Tentative" ${meeting.response === 'Tentative' ? 'selected' : ''}>Tentative</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="reason-input" value="${meeting.reason || ''}" ${meeting.response !== 'Busy' && meeting.response !== 'Tentative' ? 'disabled' : ''}>
+                    </td>
+                    <td>
+    <button onclick="saveResponse('${meeting.meetingNumber}', '${meeting.memberNumber}')" style="background-color:green;">Save</button>
+</td>
+
+                    <td>${meeting.timestmp ? `${meeting.response} on ${new Date(meeting.timestmp).toLocaleString()}` : 'No response yet'}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        async function saveResponse(meetingNumber, memberNumber) {
+            const responseSelect = document.querySelector(`.response-select[data-meeting-id="${meetingNumber}"]`);
+            const reasonInput = responseSelect.closest('tr').querySelector('.reason-input');
+            const response = responseSelect.value;
+            const reason = reasonInput.value;
+
+            try {
+                const result = await fetch('http://localhost:8081/api/meeting-response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        meetingNumber: meetingNumber,
+                        memberNumber: memberNumber,
+                        response: response,
+                        reason: reason
+                    }),
+                });
+
+                if (!result.ok) {
+                    throw new Error(`HTTP error! status: ${result.status}`);
+                }
+
+                alert('Response saved successfully!');
+                initializeTable(); // Refresh the table with updated data
+            } catch (error) {
+                console.error('Error saving response:', error);
+                alert('Failed to save response. Please try again.');
+            }
+        }
+
+        searchInput.addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase();
+            const filteredMeetings = meetingsData.filter(meeting =>
+                Object.values(meeting).some(value =>
+                    value !== null && value !== undefined && value.toString().toLowerCase().includes(searchTerm)
+                )
+            );
+            renderTable(filteredMeetings);
+        });
+
+
+        document.addEventListener('change', function (e) {
+            if (e.target.classList.contains('response-select')) {
+                const reasonInput = e.target.closest('tr').querySelector('.reason-input');
+                reasonInput.disabled = e.target.value !== 'Busy' && e.target.value !== 'Tentative';
+            }
+        });
+
+        initializeTable();
+
+
+        let member;
+
+        // Fetch all members from the API endpoint using the fetch API
+        function fetchAllMembers() {
+            const allMembersBody = document.getElementById('allMembersBody');
+            allMembersBody.innerHTML = '';
+
+            fetch('http://localhost:8081/api/member/all')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(members => {
+                    members.forEach(member => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                    <td>${member.memberNumber}</td>
+                    <td>${member.firstName} ${member.lastName}</td>
+                    <td>${member.phoneNumber}</td>
+                    <td>${member.emailAddress}</td>
+                    <td>${member.occupation}</td>
+                    <td>${new Date(member.dateOfBirth).toLocaleDateString()}</td>
+                    <td>${member.isExMember ? 'Yes' : 'No'}</td>
+                    <td>${new Date(member.dateOfJoining).toLocaleDateString()}</td>
+                `;
+                        allMembersBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching members:', error);
+                    allMembersBody.innerHTML = `<tr><td colspan="10">Error fetching members. Please try again later.</td></tr>`;
+                });
+        }
+
+
+        // Edit Member Function to fetch and open modal
+        function editMember(memberNumber) {
+
+            fetch(`http://localhost:8081/api/member/${memberNumber}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(member => {
+                    // Populate the form fields with the member's data
+                    document.getElementById('editFirstName').value = member.firstName || '';
+                    document.getElementById('editLastName').value = member.lastName || '';
+                    document.getElementById('editPhoneNumber').value = member.phoneNumber || '';
+                    document.getElementById('editEmailAddress').value = member.emailAddress || '';
+                    document.getElementById('editOccupation').value = member.occupation || '';
+                    document.getElementById('editMemberId').value = member.memberNumber || ''; // Store memberNumber in hidden field
+
+                    document.getElementById('editModal').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error fetching member:', error);
+                    alert('Failed to fetch member details.');
+                });
+        }
+
+        // Save Edited Member Function
+        document.getElementById('saveEditBtn').addEventListener('click', function () {
+
+            const updatedMember = {
+                memberNumber: document.getElementById('editMemberId').value,
+                firstName: document.getElementById('editFirstName').value,
+                lastName: document.getElementById('editLastName').value,
+                phoneNumber: document.getElementById('editPhoneNumber').value,
+                emailAddress: document.getElementById('editEmailAddress').value,
+                occupation: document.getElementById('editOccupation').value
+            };
+
+            // Send the updated member data to the server (PUT request)
+            fetch(`http://localhost:8081/api/member/${updatedMember.memberNumber}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedMember)
+            })
+                .then(data => {
+                    alert('Member updated successfully!');
+                    document.getElementById('editModal').style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Error updating member:', error);
+                    alert('Error updating member.');
+                });
+        });
+
+        // Close Modal Functionality
+        document.getElementById('closeEditModal').addEventListener('click', function () {
+            document.getElementById('editModal').style.display = 'none';
+        });
+
+
+        // Function to delete member
+        function deleteMember(memberNumber) {
+            if (confirm('Are you sure you want to delete this member?')) {
+                // Make a DELETE request to your server to remove the member
+                fetch(`http://localhost:8081/api/member/${memberNumber}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Remove the member's row from the table
+                            const row = document.querySelector(`tr[data-member-number="${memberNumber}"]`);
+                            if (row) row.remove();
+                            alert('Member deleted successfully.');
+                        } else {
+                            alert('Failed to delete the member.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting member:', error);
+                        alert('An error occurred while deleting the member.');
+                    });
+            }
+        }
+
+        //    <!--    fetch deleted members-->
+        function fetchAllDeletedMembers() {
+            fetch('http://localhost:8081/api/member/deleted-members')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Assuming the API returns a JSON array of deleted members
+                })
+                .then(members => {
+                    const tbody = document.getElementById('deletedMembersBody');
+                    tbody.innerHTML = ''; // Clear any existing content
+
+                    members.forEach(member => {
+                        const tr = document.createElement('tr');
+
+                        // Assuming the member object has these fields:
+                        // memberNumber, fullName, phoneNumber, email, occupation, dob, exMember, dateOfJoining
+                        tr.innerHTML = `
+                    <td>${member.memberNumber}</td>
+                    <td>${member.firstName + " " + member.lastName}</td>
+                    <td>${member.phoneNumber}</td>
+                    <td>${member.emailAddress}</td>
+                    <td>${member.occupation}</td>
+                    <td>${new Date(member.dateOfBirth).toLocaleDateString()}</td>
+                    <td>${member.exMember ? 'Yes' : 'No'}</td>
+                    <td>${new Date(member.dateOfJoining).toLocaleDateString()}</td>
+                `;
+
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching deleted members:', error);
+                });
+        }
+
+
+        document.getElementById("addMemberForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Gather form data
+            const formData = {
+                firstName: document.getElementById("firstName").value,
+                lastName: document.getElementById("lastName").value,
+                phoneNumber: document.getElementById("phoneNumber").value,
+                emailAddress: document.getElementById("emailAddress").value,
+                occupation: document.getElementById("occupation").value,
+                dateOfBirth: document.getElementById("dateOfBirth").value,
+                dateOfJoining: document.getElementById("dateOfJoining").value,
+                // memberShipCycle: document.getElementById("membershipCycle").value,
+                isExMember: document.getElementById("isExMember").value
+            };
+
+            // Post data to the API
+            fetch('http://localhost:8081/api/member', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // If the response is successful (status 200-299)
+                        alert("Member added successfully!");
+                        document.getElementById("addMemberForm").reset();  // Reset the form on success
+                    } else {
+                        // If the response is not successful, throw an error
+                        throw new Error("Failed to submit the form. Status: " + response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while submitting the form.");
+                });
+        });
+    </script>
+
+</body>
+
+</html>

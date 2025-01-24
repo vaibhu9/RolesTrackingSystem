@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Roles and Members</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="automate-role-section">
+        <div class="container mt-5">
+            <h1>Select Roles and Members</h1>
+
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rolesModal">Select Roles for Meeting</button>
+            <button class="btn btn-secondary ms-3" data-bs-toggle="modal" data-bs-target="#membersModal">Select Members for Meeting</button>
+
+            <!-- Roles Modal -->
+            <div class="modal fade" id="rolesModal" tabindex="-1" aria-labelledby="rolesModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="rolesModalLabel">Select Roles</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="rolesForm">
+                                <div id="rolesContainer">
+                                    <!-- Roles options will be added dynamically here -->
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-3">Submit Roles</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Members Modal -->
+            <div class="modal fade" id="membersModal" tabindex="-1" aria-labelledby="membersModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="membersModalLabel">Select Members</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="membersForm">
+                                <div id="membersContainer">
+                                    <!-- Members options will be added dynamically here -->
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-3">Submit Members</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+
+    <!-- Custom Script -->
+    <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+    const roles = []; // Example array, replace with actual data fetching
+    const members = []; // Example array, replace with actual data fetching
+
+    function populateRoles() {
+        const rolesContainer = document.getElementById('rolesContainer');
+        if (rolesContainer) {
+            rolesContainer.innerHTML = '';
+            roles.forEach(roles => {
+                rolesContainer.innerHTML += `
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="roles" value="${role.id}" id="role${role.id}">
+                        <label class="form-check-label" for="role${role.id}">
+                            ${role.roleName}
+                        </label>
+                    </div>
+                `;
+            });
+        } else {
+            console.error('Roles container not found.');
+        }
+    }
+
+    function populateMembers() {
+        const membersContainer = document.getElementById('membersContainer');
+        if (membersContainer) {
+            membersContainer.innerHTML = '';
+            members.forEach(members => {
+                // Find the role name associated with the member
+                const role = roles.find(role => role.id === member.roleId);
+                const roleName = role ? role.roleName : 'Unknown';
+
+                membersContainer.innerHTML += `
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="members" value="${member.id}" id="member${member.id}">
+                        <label class="form-check-label" for="member${member.id}">
+                            ${member.firstName} ${member.lastName} - ${roleName}
+                        </label>
+                    </div>
+                `;
+            });
+        } else {
+            console.error('Members container not found.');
+        }
+    }
+
+    document.getElementById('rolesModal').addEventListener('show.bs.modal', populateRoles);
+    document.getElementById('membersModal').addEventListener('show.bs.modal', populateMembers);
+
+
+
+     // Fetch and display roles in the modal and dropdown
+     function fetchRoles() {
+        fetch('http://localhost:8081/api/week-roles', { method: 'GET' })
+        .then(response => response.json())
+        .then(fetchedRoles => {
+            roles = fetchedRoles; // Store roles in a global variable
+        });
+        }
+
+
+
+// Fetch and display members in the modal and dropdown
+function fetchMembers() {
+    fetch('http://localhost:8081/api/member', { method: 'GET' })
+        .then(response => response.json())
+        .then(fetchedMembers => {
+            members = fetchedMembers; // Store members in a global variable
+        });
+    }
+
+    // Example of how to fetch roles and members (replace with actual API calls)
+    fetchRoles(); // Fetch roles and populate them
+    fetchMembers(); // Fetch members and populate them
+});
+
+    </script>
+</body>
+</html>
